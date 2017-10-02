@@ -39,7 +39,7 @@ scope-capture alleviates this pain by:
         ))))
 
 ;;;; You will see a log like the following:
-;SPY <-2> /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
+;SPY <-3> /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
 ;   will save scope with locals [a b x y z u v]
 
 ;=> #'sc.lab.example/my-fn
@@ -49,9 +49,9 @@ scope-capture alleviates this pain by:
 (my-fn 3 4 5)
 
 ;;;; You will see a log like the following:
-:SPY [2 -2] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
+;SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
 ;  saved scope with locals [a b x y z u v]
-;SPY [2 -2] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
+;SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
 ;(- v b)
 ;=>
 ;-13
@@ -60,11 +60,11 @@ scope-capture alleviates this pain by:
 
 ;;;; You can now use the `letsc` macro to recreate the scope of your `spy` call at the previous execution: 
 
-(sc.api/letsc 2
+(sc.api/letsc 7
   [a b u v x y z])
 ;=> [23 26 4 13 3 4 5]
 
-(sc.api/letsc 2
+(sc.api/letsc 7
   (+ x u a))
 ;=> 30  
 
@@ -72,7 +72,7 @@ scope-capture alleviates this pain by:
 ;;;; which is more convenient if you're using the 'evaluate form in REPL'
 ;;;; command of your editor:
 
-(sc.api/defsc 2)
+(sc.api/defsc 7)
 ;=> [#'sc.lab.example/a #'sc.lab.example/b #'sc.lab.example/x #'sc.lab.example/y #'sc.lab.example/z #'sc.lab.example/u #'sc.lab.example/v]
 
 a 
@@ -87,7 +87,7 @@ x
 ;;;; If your REPL supports it, you can also achive the same effect by launching a sub-REPL
 ;;;; (won't work with nREPL)
 
-(sc.repl/ep-repl 12)
+(sc.repl/ep-repl 7)
 
 ;;;; a, b, u, v etc. will always be in scope from now on
 
@@ -129,6 +129,6 @@ For these reasons, using `sc.api/letsc` or a sub-REPL is generally more error-pr
 
 ## License
 
-Copyright © 2016 Valentin Waeselynck and contributors.
+Copyright © 2017 Valentin Waeselynck and contributors.
 
 Distributed under the MIT license.
