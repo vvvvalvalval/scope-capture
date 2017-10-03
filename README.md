@@ -144,7 +144,6 @@ For these reasons, using `sc.api/letsc` or a sub-REPL is generally more error-pr
 
 * Demo video
 * Detailed Tutorial
-* API reference
 
 ## License
 

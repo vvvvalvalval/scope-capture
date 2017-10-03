@@ -299,3 +299,14 @@
     (map :sc.ep/id)
     (run! dispose!)))
 
+(defn save-ep
+  [ep-id ep-data]
+  {:pre [(integer? ep-id) (pos? ep-id)
+         (contains? ep-data :sc.ep/code-site)
+         (contains? ep-data :sc.ep/local-bindings)]}
+  (swap! db/db update-in [:execution-points ep-id]
+    (fn [old-ep]
+      (-> ep-data
+        (assoc :ep.sc/id ep-id)
+        (assoc :ep.sc/private (:sc.ep/private old-ep))
+        (update :sc.ep/code-site #(select-keys % [:sc.cs/id]))))))
