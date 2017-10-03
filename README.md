@@ -2,7 +2,7 @@
 
 This library eases REPL-based development, by providing macros which help you save and restore the local environment of a piece of code with minimal effort.
 
-Project status: still alpha, expect changes etc. On the other hand, you typically will only use it in your development environment.
+Project status: beta quality. On the other hand, you typically will only use it in your development environment, so there's little risk in adoption.
 
 ## Rationale
 
