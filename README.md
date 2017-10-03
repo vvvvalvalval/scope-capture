@@ -21,11 +21,12 @@ scope-capture alleviates this pain by:
 ## Usage
 
 ```clojure
-
 (require 'sc.api)
+```
 
-;;;; Assume you have a function with a bunch of locals:
+Assume you need to debug a function with a bunch of locals:
 
+```clojure
 (def my-fn 
   (let [a 23 
         b (+ a 3)]
@@ -33,64 +34,73 @@ scope-capture alleviates this pain by:
       (let [u (inc x)
             v (+ y z u)]
         (* (+ x u a)
-          ;; insert a `spy` call in the scope of these locals
+          ;; Insert a `spy` call in the scope of these locals
           (sc.api/spy
             (- v b)))
-        ))))
+        ))))
+=> #'sc.lab.example/my-fn
+```
 
-;;;; You will see a log like the following:
-;SPY <-3> /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
-;  At Code Site -3, will save scope with locals [a b x y z u v]
+When compiling the function, you will see a log like the following:
 
-;=> #'sc.lab.example/my-fn
+```
+SPY <-3> /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
+  At Code Site -3, will save scope with locals [a b x y z u v]
+```
 
-;;;; Now call the function 
+Now call the function:
 
+```clojure
 (my-fn 3 4 5)
+=> -390
+```
 
-;;;; You will see a log like the following:
-;SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
-;  At Execution Point 7 of Code Site -3, saved scope with locals [a b x y z u v]
-;SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
-;(- v b)
-;=>
-;-13
+You will see a log like the following:
 
-;=> -390
+```
+SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
+  At Execution Point 7 of Code Site -3, saved scope with locals [a b x y z u v]
+SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
+(- v b)
+=>
+-13
+```
 
-;;;; You can now use the `letsc` macro to recreate the scope of your `spy` call at the previous execution: 
+You can now use the `letsc` macro to recreate the scope of your `spy` call at the previous execution: 
 
+```clojure
 (sc.api/letsc 7
   [a b u v x y z])
-;=> [23 26 4 13 3 4 5]
+=> [23 26 4 13 3 4 5]
 
 (sc.api/letsc 7
   (+ x u a))
-;=> 30  
+=> 30  
+```
 
-;;;; You can also use `defsc` to recreate the scope by def-ing Vars, 
-;;;; which is more convenient if you're using the 'evaluate form in REPL'
-;;;; command of your editor:
+You can also use `defsc` to recreate the scope by def-ing Vars, which is more convenient if you're using the 'evaluate form in REPL' command of your editor:
 
+```clojure
 (sc.api/defsc 7)
-;=> [#'sc.lab.example/a #'sc.lab.example/b #'sc.lab.example/x #'sc.lab.example/y #'sc.lab.example/z #'sc.lab.example/u #'sc.lab.example/v]
+=> [#'sc.lab.example/a #'sc.lab.example/b #'sc.lab.example/x #'sc.lab.example/y #'sc.lab.example/z #'sc.lab.example/u #'sc.lab.example/v]
 
 a 
-;=> 23
+=> 23
  
 x 
-;=> 3
+=> 3
 
 (+ x z u)
-;=> 12 
+=> 12 
+```
 
-;;;; If your REPL supports it, you can also achive the same effect by launching a sub-REPL
-;;;; (won't work with nREPL)
+If your REPL supports it, you can also achive the same effect by launching a sub-REPL
+(won't work with nREPL)
 
+```clojure
 (sc.repl/ep-repl 7)
 
 ;;;; a, b, u, v etc. will always be in scope from now on
-
 ```
 
 ## Project goals
@@ -98,7 +108,8 @@ x
 * Providing practical ways of recreating the runtime environment of a piece of code at the REPL
 * Targeting a wide range of Clojure execution platforms
 * Providing a good foundation for additional tooling, e.g editor integrations
-* Being well documented, and friendly to beginners.
+* Being well documented, and friendly to beginners
+* Being customizable.
 
 ## Caveats
 
