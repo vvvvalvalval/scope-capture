@@ -18,6 +18,14 @@ scope-capture alleviates this pain by:
 * providing macros that let you save snapshots of the local environment on the fly: `sc.api/spy` (which additionally saves the evaluated wrapped expression - or the resulting error, which you can inspect using `sc.api/saved-value`) and `sc.api/brk` (which acts as a breakpoint, blocking the flow of the program until you choose to release it from the REPL using `sc.api/loose!`, possibly with a value which supersedes the evaluation of the wrapped expression using `sc.api/loose-with!` or `sc.api/loose-with-ex!`)
 * providing macros that let you restore these snapshots from the REPL: `sc.api/defsc` (recreates the environment with global vars, i.e by `def`-ing the local names) and `sc.api/letsc` (recreates the environment with locals, i.e by `let`-ing the local names)
 
+### Benefits
+
+As a consequence, **_to reproduce the runtime context of a code expression, you only need to get it to execute once_** (not necessarily from the REPL). This makes for:
+
+1. **Easier debugging**, as you can immediately focus on searching for the cause of the bug
+2. **Easier project onboarding, especially for beginners**. For someone new to project, and even more so someone new to Clojure, manually fabricating the context of a piece of code at the REPL can be a daunting task, as it requires a relatively comprehensive knowledge of the flow of values through the program. This library lets you do that in a completely mechanical and uninformed way. 
+3. **Easier exploration.** Because it lowers the barrier to experimentation, this library can be also useful for other tasks than debugging and development, such as running one-off queries as variants of existing ones, or just understading how a project works.
+
 ## Usage
 
 ```clojure
