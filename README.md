@@ -1,5 +1,7 @@
 # scope-capture
 
+[![Clojars Project](https://img.shields.io/clojars/v/vvvvalvalval/scope-capture.svg)](https://clojars.org/vvvvalvalval/scope-capture)
+
 This library eases REPL-based development, by providing macros which help you save and restore the local environment of a piece of code with minimal effort.
 
 Project status: beta quality. On the other hand, you typically will only use it in your development environment, so there's little risk in adoption.
