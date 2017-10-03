@@ -17,8 +17,8 @@
   (println prefix
     (str "<" (:sc.cs/id cs) ">")
     (source-info cs)
-    "\n  "
-    "will save scope with locals" (pr-str (:sc.cs/local-names cs))))
+    "\n "
+    (str "At Code Site " (:sc.cs/id cs) ", will save scope with locals " (pr-str (:sc.cs/local-names cs)))))
 
 (register-cs-logger
   ::log-spy-cs
@@ -41,6 +41,7 @@
       (source-info cs)
       (str
         "\n  "
+        "At Execution Point " (:sc.ep/id ep) " of Code Site " (:sc.cs/id cs) ", "
         "saved scope with locals "
         (pr-str (:sc.cs/local-names cs))))))
 

@@ -40,7 +40,7 @@ scope-capture alleviates this pain by:
 
 ;;;; You will see a log like the following:
 ;SPY <-3> /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
-;   will save scope with locals [a b x y z u v]
+;  At Code Site -3, will save scope with locals [a b x y z u v]
 
 ;=> #'sc.lab.example/my-fn
 
@@ -50,7 +50,7 @@ scope-capture alleviates this pain by:
 
 ;;;; You will see a log like the following:
 ;SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
-;  saved scope with locals [a b x y z u v]
+;  At Execution Point 7 of Code Site -3, saved scope with locals [a b x y z u v]
 ;SPY [7 -3] /Users/val/projects/scope-capture/lab/sc/lab/example.cljc:52 
 ;(- v b)
 ;=>
