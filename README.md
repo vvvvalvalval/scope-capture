@@ -30,6 +30,8 @@ As a consequence, **_to reproduce the runtime context of a code expression, you 
 
 ## Usage
 
+**[Tutorial](doc/Tutorial.md)**
+
 ```clojure
 (require 'sc.api)
 ```
