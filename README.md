@@ -38,8 +38,9 @@ As a consequence, **_to reproduce the runtime context of a code expression, you 
 * Re-creating a recorded scope: with let-bound locals: `sc.api/letsc` / with global Vars: `sc.api/defsc`/ with a sub-REPL: `sc.repl/ep-repl`
 * Accessing recorded information: `sc.api/ep-info`, `sc.api/cs-info`
 * Suspending and resuming execution (similar to breakpoints): `sc.api/brk`, `sc.api/loose`, `sc.api/loose-with`, `sc.api/loose-with-err`
-* Cleaning up after yourself: `sc.api/undefsc`, `sc.api/disable!`
+* Cleaning up after yourself: `sc.api/undefsc`, `sc.api/dispose!`, `sc.api/disable!`
 * Customizing: `sc.api/spy-emit`, `sc.api/brk-emit`, `sc.api.logging/register-cs-logger`
+* Artificially creating scopes: `sc.api/save-ep`
 
 ## Usage
 
