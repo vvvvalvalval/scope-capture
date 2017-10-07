@@ -17,8 +17,8 @@ What the blog post does not mention is that oftentimes, this first step (recreat
 
 scope-capture alleviates this pain by:
 
-* providing macros that let you save snapshots of the local environment on the fly: `sc.api/spy` (which additionally saves the evaluated wrapped expression - or the resulting error, which you can inspect using `sc.api/saved-value`) and `sc.api/brk` (which acts as a breakpoint, blocking the flow of the program until you choose to release it from the REPL using `sc.api/loose!`, possibly with a value which supersedes the evaluation of the wrapped expression using `sc.api/loose-with!` or `sc.api/loose-with-ex!`)
-* providing macros that let you restore these snapshots from the REPL: `sc.api/defsc` (recreates the environment with global vars, i.e by `def`-ing the local names) and `sc.api/letsc` (recreates the environment with locals, i.e by `let`-ing the local names)
+* providing macros that let you **_save snapshots of the local environment on the fly_**: `sc.api/spy` (which additionally saves the evaluated wrapped expression - or the resulting error, which you can inspect using `sc.api/saved-value`) and `sc.api/brk` (which acts as a breakpoint, blocking the flow of the program until you choose to release it from the REPL using `sc.api/loose!`, possibly with a value which supersedes the evaluation of the wrapped expression using `sc.api/loose-with!` or `sc.api/loose-with-ex!`)
+* providing macros that let you **_restore these snapshots from the REPL_**: `sc.api/defsc` (recreates the environment with global vars, i.e by `def`-ing the local names) and `sc.api/letsc` (recreates the environment with locals, i.e by `let`-ing the local names)
 
 ### Benefits
 
@@ -147,7 +147,6 @@ For these reasons, using `sc.api/letsc` or a sub-REPL is generally more error-pr
 ## TODO
 
 * Demo video
-* Detailed Tutorial
 
 ## License
 
