@@ -6,6 +6,10 @@ This library eases REPL-based development, by providing macros which help you sa
 
 Project status: beta quality. On the other hand, you typically will only use it in your development environment, so there's little risk in adoption.
 
+**[Demo video:](https://vimeo.com/237220354)**
+
+[![Demo preview](https://i.vimeocdn.com/video/659566887.webp?mw=1000&mh=561)](https://vimeo.com/237220354)
+
 ## Rationale
 
 This library is designed to support the programming / debugging methodology advocated by Stuart Halloway in this blog post: [_REPL Debugging: No Stacktrace Required_](http://blog.cognitect.com/blog/2017/6/5/repl-debugging-no-stacktrace-required), which consists of: 
@@ -143,10 +147,6 @@ Local/global name collisions:
 * In particular, if a global Var as been `def`ed via `defonce`, `sc.api/defsc` won't work for a local of the same name.
 
 For these reasons, using `sc.api/letsc` or a sub-REPL is generally more error-proof than using `defsc`, although in many cases it is less practical.
-
-## TODO
-
-* Demo video
 
 ## License
 
