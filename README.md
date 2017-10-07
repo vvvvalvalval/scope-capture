@@ -32,6 +32,15 @@ As a consequence, **_to reproduce the runtime context of a code expression, you 
 2. **Easier project onboarding, especially for beginners**. For someone new to project, and even more so someone new to Clojure, manually fabricating the context of a piece of code at the REPL can be a daunting task, as it requires a relatively comprehensive knowledge of the flow of values through the program. This library lets you do that in a completely mechanical and uninformed way. 
 3. **Easier exploration.** Because it lowers the barrier to experimentation, this library can be also useful for other tasks than debugging and development, such as running one-off queries as variants of existing ones, or just understading how a project works.
 
+## Features
+
+* Recording / logging the runtime scope and evaluation of an expression: `sc.api/spy`
+* Re-creating a recorded scope: with let-bound locals: `sc.api/letsc` / with global Vars: `sc.api/defsc`/ with a sub-REPL: `sc.repl/ep-repl`
+* Accessing recorded information: `sc.api/ep-info`, `sc.api/cs-info`
+* Suspending and resuming execution (similar to breakpoints): `sc.api/brk`, `sc.api/loose`, `sc.api/loose-with`, `sc.api/loose-with-err`
+* Cleaning up after yourself: `sc.api/undefsc`, `sc.api/disable!`
+* Customizing: `sc.api/spy-emit`, `sc.api/brk-emit`, `sc.api.logging/register-cs-logger`
+
 ## Usage
 
 (See also the **[detailed tutorial](doc/Tutorial.md)**)
