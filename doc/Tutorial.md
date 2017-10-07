@@ -1,12 +1,19 @@
 # Tutorial
 
+The first step in using scope-capture is making sure the `sc.api` namespace is loaded:
+
+```clojure
+(require 'sc.api)
+```
+
 ## Recording and recreating scopes
 
-Imagine you want to debug the following piece of code, in this case a function 
- that computes the distance between 2 points based on their coordinates using 
- the Haversine formula:
+Imagine you want to debug the following piece of code, in this case a hairy function 
+ that computes the distance between 2 points based on their coordinates, using 
+ the [Haversine formula](https://en.wikipedia.org/wiki/Haversine_formula):
  
 ```clojure
+(ns sc.lab.tutorial)
 
 (defn haversine
   [x]
@@ -36,7 +43,7 @@ Imagine you want to debug the following piece of code, in this case a function
         ))))
 ```
 
-There must be a bug in this function: whatever the inputs, the result is 0.0!
+There must be a bug in this function: whatever the inputs, the result is `0.0` meters!
  
 ```clojure 
 (def Paris [48.8566 2.3522])
@@ -109,7 +116,8 @@ SPY [1 -1] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:52
 ```
 
 `1` is the id of the _Execution Point_ at which our `spy` call just ran.
- Let's use the `sc.api/ep-info` function to get information about that execution point:
+ Now let's use the `sc.api/ep-info` function to get information about that Execution Point.
+ You typically won't use `ep-info` for everyday development, but it's useful for understading what `spy` does:
  
 ```clojure
 (sc.api/ep-info 1)
@@ -228,7 +236,7 @@ Speaking of memory leaks: we can free the memory used by our Execution Point usi
 
 `sc.api/brk` is similar to `sc.api/spy`, except that it wil block the running thread
  (instead of immediately evaluating the wrapped expression and saving the result),
- until you choose to release it. Example
+ until you choose to release it. For example:
  
 ```clojure 
 (require '[clojure.string :as str])
@@ -237,7 +245,7 @@ Speaking of memory leaks: we can free the memory used by our Execution Point usi
   [first-name]
   (let [msg (str "Hello, " (str/capitalize first-name) "!")]
     (println
-      (sc.api/brk msg) ;; BRK call here
+      (sc.api/brk msg) ;; brk call HERE
       )))
 ;BRK <-2> /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:183
 ;At Code Site -2, will save scope with locals [first-name msg]
@@ -249,7 +257,7 @@ Now, invode this function in another thread:
 ```clojure 
 (def fut
   (future
-    (greet! "Jude")))
+    (greet! "jude")))
 ;BRK [3 -2] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:183
 ;saved scope with locals [first-name msg], use sc.api/loose(-...) to resume execution.
 => #'sc.lab.tutorial/fut
@@ -270,14 +278,17 @@ We now have 3 options to resume it:
 ```clojure 
 ;; continue execution normally
 (sc.api/loose 3)
+; Hello Jude!
 
 ;; continue execution by replacing `msg` with the provided value instead of evaluating it
 (sc.api/loose-with 3 "Bonjour, Jude !")
+; Bonjour, Jude !
 
 ;; continue execution by throwing the given Exception
 ;; (useful to prevent downstream side-effects or break out of a loop)
 (sc.api/loose-with-err 3 (ex-info "Aaaaaarrrrgh" {}))
 ````
+
 
 ## Disabling code sites
 
@@ -296,7 +307,8 @@ This is useful if you placed a `(brk ...)` call inside a loop, and want to suspe
 In Clojure platforms where compilation and execution don't share their address space
  (such as JVM-compiled ClojureScript, which is currently the most popular way of programming in ClojureScript)
  there is no way to link compile-time information to an Execution Point Id.
- Therefore, when using the `defsc` and `letsc` macros, you need to explicitly pass
+ 
+Therefore, when using the `defsc` and `letsc` macros, you need to explicitly pass
  the Code Site Id in addition to the Execution Point Id, which is done by wrapping both
  in a vector literal:
  
@@ -350,6 +362,8 @@ For instance, you can customize the log messages emitted by `spy` at compile-tim
   ([expr] (sc.api/spy-emit my-spy-opts expr &env &form))
   ([opts expr] (sc.api/spy-emit (merge my-spy-opts opts) expr &env &form)))
 ```
+
+You could also use these customization hooks to integrate `scope-capture` to other tools, e.g IDEs!
 
 ## Recreating the environment by launching a sub-REPL
 
