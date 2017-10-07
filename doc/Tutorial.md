@@ -355,7 +355,7 @@ For instance, you can customize the log messages emitted by `spy` at compile-tim
 (def my-spy-opts 
   ;; mind the syntax-quote '`'
   `{:sc/spy-cs-logger-id ::log-spy-cs-with-timbre
-    :sc/spy-ep-post-eval-logger log-spy-cs-with-timbre})
+    :sc/spy-ep-post-eval-logger log-spy-ep-with-timbre})
 
 (defmacro my-spy
   ([] (sc.api/spy-emit my-spy-opts nil &env &form))
