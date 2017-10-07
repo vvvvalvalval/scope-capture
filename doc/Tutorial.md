@@ -22,7 +22,7 @@ Imagine you want to debug the following piece of code, in this case a hairy func
 
 (def distance
   (let [earth-radius 6.371e6
-        radians-per-degree (/ 180.0 Math/PI)]
+        radians-per-degree (/ Math/PI 180.0)]
     (fn [p1 p2]
       (let [[lat1 lng1] p1
             [lat2 lng2] p1
@@ -64,7 +64,7 @@ To find the bug, you wrap the last expression with an `sc.api/spy` call:
 ;; change the previously defined function to the following:
 (def distance
   (let [earth-radius 6.371e6
-        radians-per-degree (/ 180.0 Math/PI)]
+        radians-per-degree (/ Math/PI 180.0)]
     (fn [p1 p2]
       (let [[lat1 lng1] p1
             [lat2 lng2] p1
@@ -90,8 +90,8 @@ When compiling the function (i.e when evaluating the `(def distance ...)` form i
  you should see a message like the following being logged:
   
 ```
-SPY <-1> /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:52 
-  At Code Site -1, will save scope with locals [earth-radius vec__15673 radians-per-degree p2 vec__15672 phi2 phi1 lat1 lng2 lambda2 lat2 lambda1 p1 lng1]
+SPY <-1> /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:19
+  At Code Site -1, will save scope with locals [earth-radius radians-per-degree p2 phi2 phi1 lat1 lng2 lambda2 lat2 lambda1 p1 vec__15610 vec__15609 lng1]
 ```
 
 `-1` is the id of the _Code Site_ at which we placed the `spy` call, which you can think of 
@@ -107,9 +107,9 @@ Now invoke the function with some inputs:
 You should see a message like the following being logged:
 
 ```
-SPY [1 -1] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:52 
-  At Execution Point 1 of Code Site -1, saved scope with locals [earth-radius vec__15673 radians-per-degree p2 vec__15672 phi2 phi1 lat1 lng2 lambda2 lat2 lambda1 p1 lng1]
-SPY [1 -1] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:52 
+SPY [1 -1] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:19
+  At Execution Point 1 of Code Site -1, saved scope with locals [earth-radius radians-per-degree p2 phi2 phi1 lat1 lng2 lambda2 lat2 lambda1 p1 vec__15610 vec__15609 lng1]
+SPY [1 -1] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:19
 (* 2 earth-radius (Math/asin (Math/sqrt (+ (haversine (- phi2 phi1)) (* (Math/cos phi1) (Math/cos phi2) (haversine (- lambda2 lambda1)))))))
 =>
 0.0
@@ -125,18 +125,16 @@ SPY [1 -1] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:52
 {:sc.ep/id 1,
  :sc.ep/code-site {:sc.cs/id -1,
                    :sc.cs/expr (*
-                                 2
-                                 earth-radius
-                                 (Math/asin
-                                   (Math/sqrt
-                                     (+
-                                       (haversine (- phi2 phi1))
-                                       (* (Math/cos phi1) (Math/cos phi2) (haversine (- lambda2 lambda1))))))),
+                                2
+                                earth-radius
+                                (Math/asin
+                                 (Math/sqrt
+                                  (+
+                                   (haversine (- phi2 phi1))
+                                   (* (Math/cos phi1) (Math/cos phi2) (haversine (- lambda2 lambda1))))))),
                    :sc.cs/local-names [earth-radius
-                                       vec__15673
                                        radians-per-degree
                                        p2
-                                       vec__15672
                                        phi2
                                        phi1
                                        lat1
@@ -145,24 +143,26 @@ SPY [1 -1] /Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj:52
                                        lat2
                                        lambda1
                                        p1
+                                       vec__15610
+                                       vec__15609
                                        lng1],
                    :sc.cs/dynamic-var-names nil,
                    :sc.cs/file "/Users/val/projects/scope-capture/lab/sc/lab/tutorial.clj",
-                   :sc.cs/line 52,
+                   :sc.cs/line 19,
                    :sc.cs/column 9},
  :sc.ep/local-bindings {earth-radius 6371000.0,
-                        vec__15673 [48.8566 2.3522],
-                        radians-per-degree 57.29577951308232,
-                        p2 [37.9838 23.7275],
-                        vec__15672 [48.8566 2.3522],
-                        phi2 2799.276981358858,
-                        phi1 2799.276981358858,
+                        radians-per-degree 0.017453292519943295,
+                        p2 [40.7134 -74.0055],
+                        phi2 0.8527085313298616,
+                        phi1 0.8527085313298616,
                         lat1 48.8566,
                         lng2 2.3522,
-                        lambda2 134.77113257067222,
+                        lambda2 0.041053634665410614,
                         lat2 48.8566,
-                        lambda1 134.77113257067222,
+                        lambda1 0.041053634665410614,
                         p1 [48.8566 2.3522],
+                        vec__15610 [48.8566 2.3522],
+                        vec__15609 [48.8566 2.3522],
                         lng1 2.3522},
  :sc.ep/dynamic-var-bindings {},
  :sc.ep/value 0.0}
@@ -179,10 +179,8 @@ We'll now automatically recreate the environment of our Execution Point using
 (sc.api/defsc 1)
 =>
 [#'sc.lab.tutorial/earth-radius
- #'sc.lab.tutorial/vec__15673
  #'sc.lab.tutorial/radians-per-degree
  #'sc.lab.tutorial/p2
- #'sc.lab.tutorial/vec__15672
  #'sc.lab.tutorial/phi2
  #'sc.lab.tutorial/phi1
  #'sc.lab.tutorial/lat1
@@ -191,6 +189,8 @@ We'll now automatically recreate the environment of our Execution Point using
  #'sc.lab.tutorial/lat2
  #'sc.lab.tutorial/lambda1
  #'sc.lab.tutorial/p1
+ #'sc.lab.tutorial/vec__15610
+ #'sc.lab.tutorial/vec__15609
  #'sc.lab.tutorial/lng1]
 ```
 
@@ -205,13 +205,13 @@ What just happened? `defsc` has just `def`ined global Vars that have the same na
 => [48.8566 2.3522]
 
             lambda1
-=> 134.77113257067222
+=> 0.041053634665410614
 
                 (haversine (- phi2 phi1))
 => 0.0
 
                   (Math/cos phi2)
-=> -0.9930546646519571
+=> 0.6579458609946129
 
                            (- phi2 phi1)
 => 0.0

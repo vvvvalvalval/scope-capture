@@ -8,10 +8,10 @@
 
 (def distance
   (let [earth-radius 6.371e6
-        radians-per-degree (/ 180.0 Math/PI)]
+        radians-per-degree (/ Math/PI 180.0)]
     (fn [p1 p2]
       (let [[lat1 lng1] p1
-            [lat2 lng2] p2
+            [lat2 lng2] p1
             phi1 (* lat1 radians-per-degree)
             lambda1 (* lng1 radians-per-degree)
             phi2 (* lat2 radians-per-degree)
@@ -80,7 +80,7 @@
 
 (def distance
   (let [earth-radius 6.371e6
-        radians-per-degree (/ 180.0 Math/PI)]
+        radians-per-degree (/ Math/PI 180.0)]
     (fn [p1 p2]
       (let [[lat1 lng1] p1
             [lat2 lng2] p1
