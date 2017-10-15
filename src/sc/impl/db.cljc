@@ -6,5 +6,4 @@
 
 (defonce db
   (atom {:code-sites {}
-         :execution-points {}
-         }))
+         :execution-points {}}))

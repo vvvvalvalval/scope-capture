@@ -175,16 +175,10 @@
   [ep-id & body]
   (let [cs (i/resolve-code-site ep-id)
         ep-id (i/resolve-ep-id ep-id)]
-    `(binding
-       ~(into []
-          (mapcat (fn [dvn]
-                    [dvn `(i/ep-var-binding ~ep-id (quote ~dvn))]))
-          (:sc.cs/dynamic-var-names cs))
-       (let ~(into []
-               (mapcat
-                 (fn [ln]
-                   [ln `(i/ep-binding ~ep-id (quote ~ln))]))
-               (:sc.cs/local-names cs))
+    `(binding [~@(mapcat #(list `~% (i/ep-var-binding ~ep-id `~%))
+                         (:sc.cs/dynamic-var-names cs))]
+       (let [~@(mapcat #(list `~% (i/ep-binding ep-id `~%))
+                       (:sc.cs/local-names cs))]
          ~@body))))
 
 (defmacro defsc
@@ -211,10 +205,8 @@
   [ep-id]
   (let [cs (i/resolve-code-site ep-id)
         ep-id (i/resolve-ep-id ep-id)]
-    (into []
-      (map (fn [ln]
-             `(def ~ln (i/ep-binding ~ep-id (quote ~ln)))))
-      (:sc.cs/local-names cs))))
+    `[~@(map #(list 'def `~% (i/ep-binding ep-id `~%))
+             (:sc.cs/local-names cs))]))
 
 (defmacro undefsc
   "Given an identifier `ep-or-cs-id` for a Code Site,
@@ -236,10 +228,8 @@
                             {:ep-or-cs-id ep-or-cs-id})))
         nz (ns-name *ns*)]
     `(do
-       ~@(map
-           (fn [ln]
-             `(ns-unmap (quote ~nz) (quote ~ln)))
-           (:sc.cs/local-names cs))
+       ~@(map #(list 'ns-unmap `'~nz `'~%)
+              (:sc.cs/local-names cs))
        nil)))
 
 (defn loose
@@ -313,6 +303,3 @@
   "
   [ep-id ep-data]
   (i/save-ep ep-id ep-data))
-
-
-
