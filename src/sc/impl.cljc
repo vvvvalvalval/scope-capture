@@ -1,6 +1,5 @@
 (ns sc.impl
   (:require [#?(:clj clojure.core.async :cljs cljs.core.async) :as a]
-
             [sc.impl.db :as db]
             [sc.impl.logging :as il]
             [sc.api.logging]))
@@ -24,8 +23,7 @@
         cs (-> db :code-sites (get (-> ep :sc.ep/code-site :sc.cs/id)))]
     (-> ep
       (dissoc :sc.ep/private)
-      (assoc :sc.ep/code-site cs))
-    ))
+      (assoc :sc.ep/code-site cs))))
 
 (defn ep-info
   [ep-id]
@@ -161,8 +159,7 @@
                          :cljs `:default) err#
                  (when-not (cs-disabled? ~(:sc.cs/id cs-data))
                    (save-and-log-v ~spy-post-eval-logger ~ep-id-s true err#))
-                 (throw err#))))))
-    ))
+                 (throw err#))))))))
 
 (defn add-ep-brk-chan
   [ep-id]
@@ -218,8 +215,7 @@
                      :cljs `:default) err#
              (when-not (cs-disabled? ~(:sc.cs/id cs-data))
                (save-and-log-v ~brk-post-eval-logger ~ep-id-s true err#))
-             (throw err#)))))
-    ))
+             (throw err#)))))))
 
 (defn brk-send-chan
   [ep-id cmd]
@@ -239,8 +235,7 @@
       (let [[ep-id cs-id] v]
         (and
           (integer? ep-id) (pos? ep-id)
-          (integer? cs-id) (neg? cs-id))))
-    ))
+          (integer? cs-id) (neg? cs-id))))))
 
 (defn validate-ep-identifier
   [ep-id]

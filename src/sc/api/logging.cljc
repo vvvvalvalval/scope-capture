@@ -62,8 +62,6 @@
           :else
           "")))))
 
-
-
 (defn log-brk-ep-pre-eval
   [ep]
   (let [cs (:sc.ep/code-site ep)]
@@ -92,5 +90,3 @@
           (str "\nthrew\n" (pr-str (:sc.ep/error ep)))
           :else
           "")))))
-
-
