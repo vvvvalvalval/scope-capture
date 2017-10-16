@@ -252,7 +252,7 @@ Speaking of memory leaks: we can free the memory used by our Execution Point usi
 => #'sc.lab.tutorial/greet!
 ```
 
-Now, invode this function in another thread:
+Now, invoke this function in another thread:
  
 ```clojure 
 (def fut
