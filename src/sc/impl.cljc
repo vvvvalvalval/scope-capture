@@ -34,7 +34,7 @@
 (defn read-cs-info
   [db cs-id]
   (-> db :code-sites (get cs-id)
-    (or (throw (ex-info "No Code Site found with id " cs-id {:sc.cs/id cs-id})))))
+    (or (throw (ex-info (str "No Code Site found with id " cs-id) {:sc.cs/id cs-id})))))
 
 (defn cs-info
   [cs-id]
