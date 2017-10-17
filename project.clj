@@ -1,4 +1,4 @@
-(defproject vvvvalvalval/scope-capture "0.1.0"
+(defproject vvvvalvalval/scope-capture "0.1.1"
   :description "Easier REPL-based debugging for Clojure by saving and restoring snapshots of the local environment."
   :url "https://github.com/vvvvalvalval/scope-capture"
   :license {:name "MIT"
