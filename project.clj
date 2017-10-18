@@ -3,8 +3,7 @@
   :url "https://github.com/vvvvalvalval/scope-capture"
   :license {:name "MIT"
             :url "https://opensource.org/licenses/MIT"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/core.async "0.2.395"]]
+  :dependencies [[org.clojure/clojure "1.8.0"]]
   :profiles
   {:lab
    {:source-paths ["src" "lab"]

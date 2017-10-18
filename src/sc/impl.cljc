@@ -1,7 +1,5 @@
 (ns sc.impl
-  (:require [#?(:clj clojure.core.async :cljs cljs.core.async) :as a]
-
-            [sc.impl.db :as db]
+  (:require [sc.impl.db :as db]
             [sc.impl.logging :as il]
             [sc.api.logging]))
 
@@ -164,11 +162,18 @@
                  (throw err#))))))
     ))
 
-(defn add-ep-brk-chan
+(defn add-ep-brk-port
   [ep-id]
-  (let [ch (a/chan 1)]
-    (swap! db/db assoc-in [:execution-points ep-id :sc.ep/private :sc.ep/brk-chan] ch)
-    ch))
+  #?(:clj
+     (let [p (promise)]
+       (swap! db/db assoc-in [:execution-points ep-id :sc.ep/private :sc.ep/brk-send-resume-cmd]
+         (fn send-resume-cmd [cmd]
+           (deliver p cmd)
+           nil))
+       p)
+
+     :cljs
+     (throw (ex-info "BRK not supported on ClojureScript." {}))))
 
 (defn brk-emit
   [opts expr amp-env amp-form]
@@ -189,12 +194,12 @@
       `(let [~ep-id-s (gen-ep-id)]
          (try
            (let [cs-disabled?# (cs-disabled? ~cs-id)
-                 ch# (when-not cs-disabled?#
-                       (add-ep-brk-chan ~ep-id-s))
+                 p# (when-not cs-disabled?#
+                       (add-ep-brk-port ~ep-id-s))
                  _# ~(emit-save-scope brk-pre-eval-logger ep-id-s cs-data)
                  v# (let [cmd# (if cs-disabled?#
                                  {:sc.brk/type :sc.brk.type/loose}
-                                 (a/<!! ch#))]
+                                 (deref p#))]
                       (if (nil? cmd#)
                         (throw (ex-info "BRK channel was closed." {:sc.ep/id ~ep-id-s}))
                         (case (:sc.brk/type cmd#)
@@ -221,11 +226,11 @@
              (throw err#)))))
     ))
 
-(defn brk-send-chan
+(defn brk-send-resume-cmd
   [ep-id cmd]
-  (a/put! (-> (find-ep @db/db ep-id)
-            :sc.ep/private :sc.ep/brk-chan
-            (or (throw (ex-info "This Execution Point was not created via sc.api/brk" {:ep-id ep-id}))))
+  ((-> (find-ep @db/db ep-id)
+     :sc.ep/private :sc.ep/brk-send-resume-cmd
+     (or (throw (ex-info "This Execution Point was not created via sc.api/brk" {:ep-id ep-id}))))
     cmd))
 
 (defn valid-ep-identifier?
@@ -288,8 +293,8 @@
 
 (defn dispose!
   [ep-id]
-  (when-let [ch (get-in @db/db [:execution-points ep-id :sc.ep/private :sc.ep/brk-chan])]
-    (a/close! ch))
+  (when-let [f (get-in @db/db [:execution-points ep-id :sc.ep/private :sc.ep/brk-send-resume-cmd])]
+    (f nil))
   (swap! db/db update :execution-points dissoc ep-id)
   nil)
 

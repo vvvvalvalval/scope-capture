@@ -247,14 +247,14 @@
   created by `brk` which is currently in a suspended state,
   resumes execution by evaluating the wrapped form."
   [ep-id]
-  (i/brk-send-chan ep-id {:sc.brk/type :sc.brk.type/loose}))
+  (i/brk-send-resume-cmd ep-id {:sc.brk/type :sc.brk.type/loose}))
 
 (defn loose-with
   "Same as `sc.api/loose`, except that execution is resumed by
   yielding the provided value `v` instead of evaluating the wrapped
   expression."
   [ep-id v]
-  (i/brk-send-chan ep-id {:sc.brk/type :sc.brk.type/loose-with
+  (i/brk-send-resume-cmd ep-id {:sc.brk/type :sc.brk.type/loose-with
                           :sc.brk/loose-value v}))
 
 (defn loose-with-err
@@ -262,7 +262,7 @@
   throwing `err` instead of evaluating the wrapped
   expression."
   [ep-id err]
-  (i/brk-send-chan ep-id {:sc.brk/type :sc.brk.type/loose-with-err
+  (i/brk-send-resume-cmd ep-id {:sc.brk/type :sc.brk.type/loose-with-err
                           :sc.brk/loose-error err}))
 
 (defn disable!
