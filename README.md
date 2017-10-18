@@ -154,7 +154,7 @@ Dynamic Vars:
 Local/global name collisions:
 
 * `sc.api/defsc` will overwrite the global Vars that have the same name as the locals it has captured 
-* In particular, if a global Var as been `def`ed via `defonce`, `sc.api/defsc` won't work for a local of the same name.
+* In particular, if a global Var has been `def`ed via `defonce`, `sc.api/defsc` won't work for a local of the same name.
 
 For these reasons, using `sc.api/letsc` or a sub-REPL is generally more error-proof than using `defsc`, although in many cases it is less practical.
 
