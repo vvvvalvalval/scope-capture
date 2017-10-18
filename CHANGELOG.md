@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+## 0.1.2 - 2017-10-18
 ## Changed
 - Removed core.async, used clojure.core/promise for BRK
 
@@ -16,5 +17,6 @@ All notable changes to this project will be documented in this file. This change
 - Docstrings
 - Tutorial
 
-[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/0.1.1...HEAD
+[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/0.1.2...HEAD
+[0.1.2]: https://github.com/vvvvalvalval/scope-capture/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/vvvvalvalval/scope-capture/compare/0.1.0...0.1.1
