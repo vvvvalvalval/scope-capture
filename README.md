@@ -17,7 +17,7 @@ This library is designed to support the programming / debugging methodology advo
 1. recreating the environment in which a piece of code runs (using `def`s) 
 2. evaluating forms in the code buffer to narrow down the cause of the problem
 
-What the blog post does not mention is that oftentimes, this first step (recreating the local environment) can get very tedious and error-prone; especially when the values of the environment are difficult to fabricate (HTTP requests, database connecitons, etc.), which can be the case for online programs such as web servers, or if you don't have a keen knowledge of the project.
+What the blog post does not mention is that oftentimes, this first step (recreating the local environment) can get very tedious and error-prone; especially when the values of the environment are difficult to fabricate (HTTP requests, database connections, etc.), which can be the case for online programs such as web servers, or if you don't have a keen knowledge of the project.
 
 scope-capture alleviates this pain by:
 
