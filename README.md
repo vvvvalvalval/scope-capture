@@ -139,6 +139,8 @@ If your REPL supports it, you can also achive the same effect by launching a sub
 
 ## Caveats
 
+Using scope-capture with ClojureScript is supported, but can get tricky: when in trouble, see the [Pitfalls with ClojureScript REPLs](https://github.com/vvvvalvalval/scope-capture/wiki/Pitfalls-with-(browser-connected)-ClojureScript-REPLs) Wiki Page.
+
 Dynamic Vars:
 
 * In order for `spy`/`brk` to record dynamic Var bindings, the list of dynamic Vars to observe must be explicitly declared as an option, e.g 
