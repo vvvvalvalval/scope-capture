@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. This change
 ## [Unreleased]
 ### Added
 - Basic example-based tests for spy and brk
+### Fixed 
+- default CS logger prints directly to standard output so as not to get mixed with emitted JavaScript.
 
 ## 0.1.2 - 2017-10-18
 ## Changed

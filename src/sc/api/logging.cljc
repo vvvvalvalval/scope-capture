@@ -12,13 +12,19 @@
 (defn- source-info [cs]
   (str (get cs :sc.cs/file "(Unknown file)") ":" (:sc.cs/line cs)))
 
+(defn- portable-println
+  [s]
+  #?(:clj  (.println System/out ^String s)
+     :cljs (.log js/console s)))
+
 (defn log-cs
   [prefix cs]
-  (println prefix
-    (str "<" (:sc.cs/id cs) ">")
-    (source-info cs)
-    "\n "
-    (str "At Code Site " (:sc.cs/id cs) ", will save scope with locals " (pr-str (:sc.cs/local-names cs)))))
+  (portable-println
+    (str
+      prefix " <" (:sc.cs/id cs) "> "
+      (source-info cs) " "
+      "\n "
+      (str "At Code Site " (:sc.cs/id cs) ", will save scope with locals " (pr-str (:sc.cs/local-names cs))))))
 
 (register-cs-logger
   ::log-spy-cs
