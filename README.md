@@ -42,6 +42,8 @@ As a consequence, **_to reproduce the runtime context of a code expression, you 
 * Customizing: `sc.api/spy-emit`, `sc.api/brk-emit`, `sc.api.logging/register-cs-logger`
 * Artificially creating scopes: `sc.api/save-ep`
 
+For nREPL integration, see also the [scope-capture-nrepl](https://github.com/vvvvalvalval/scope-capture-nrepl) companion library.
+
 ## Usage
 
 (See also the **[detailed tutorial](doc/Tutorial.md)**)
