@@ -1,5 +1,7 @@
 # scope-capture
 
+`[vvvvalvalval/scope-capture "0.1.3"]`
+
 [![Clojars Project](https://img.shields.io/clojars/v/vvvvalvalval/scope-capture.svg)](https://clojars.org/vvvvalvalval/scope-capture)
 
 This library eases REPL-based development, by providing macros which help you save and restore the local environment of a piece of code with minimal effort.
@@ -43,6 +45,28 @@ As a consequence, **_to reproduce the runtime context of a code expression, you 
 * Artificially creating scopes: `sc.api/save-ep`
 
 For nREPL integration, see also the [scope-capture-nrepl](https://github.com/vvvvalvalval/scope-capture-nrepl) companion library.
+
+## Installation
+
+With both Leiningen and Boot, it's better not to include `scope-capture` in your project dependencies but rather in your local environment. Here's how to do it :
+
+### Leiningen
+
+Add the following to the `:user` profile in `~/.lein/profiles.clj`:
+
+``` clojure
+:dependencies [[vvvvalvalval/scope-capture "0.1.3"]]
+:injections [(require 'sc.api)]
+```
+
+### Boot
+
+Using a `$BOOT_HOME/profile.boot` (usually `~/.boot/profile.boot`) file:
+
+``` clojure
+(set-env! :dependencies #(conj % '[vvvvalvalval/scope-capture "0.1.3"]))
+(require 'sc.api)
+```
 
 ## Usage
 
