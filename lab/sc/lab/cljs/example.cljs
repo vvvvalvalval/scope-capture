@@ -1,6 +1,6 @@
 (ns sc.lab.cljs.example
   (:require [sc.api :as sc])
-  (:require-macros [sc.api :as scm]))
+  #_(:require-macros [sc.api :as scm]))
 
 (def foo
   (let [a 1
@@ -8,7 +8,7 @@
     (fn [x y]
       (let [z (+ x (* a y))]
         (* 3
-          (scm/spy
+          (sc.api/spy
             (throw (ex-info "Arrrrrg" {}))))))))
 
 (foo 1 2)

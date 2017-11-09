@@ -1,5 +1,6 @@
 (ns sc.api
-  (:require [sc.impl :as i]))
+  (:require [sc.impl :as i])
+  #?(:cljs (:require-macros sc.api)))
 
 (defn spy-emit
   "Helper function for implementing (your own version of) the

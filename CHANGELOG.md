@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+## 0.1.4 - 2017-10-19
+### Added
+- sc.api now requires its own macros in CLJS, making it easier to use in ClojureScript
 ## 0.1.3 - 2017-10-19
 ### Added
 - Basic example-based tests for spy and brk
@@ -23,7 +26,8 @@ All notable changes to this project will be documented in this file. This change
 - Docstrings
 - Tutorial
 
-[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.0...v0.1.1
