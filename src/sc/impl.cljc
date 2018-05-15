@@ -111,7 +111,7 @@
   (let [ep (save-v ep-id error? v)]
     (try
       (log-v ep)
-      (catch Throwable err nil)))
+      (catch #?(:clj Throwable :cljs :default) err nil)))
   nil)
 
 (defn emit-save-scope
