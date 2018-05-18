@@ -71,7 +71,10 @@
        amp-env amp-form expr)
      :sc.cs/dynamic-var-names
      (get opts :sc/dynamic-vars nil)
-     :sc.cs/file *file*                                     ;; TODO is this portable? (Val, 02 Oct 2017)
+     :sc.cs/file #?(:clj (case (compilation-target amp-env)
+                           :clj *file*
+                           :cljs (:file fm))
+                    :cljs (:file fm))
      :sc.cs/line (:line fm)
      :sc.cs/column (:column fm)}))
 
