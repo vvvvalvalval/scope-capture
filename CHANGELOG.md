@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+### Fixed
+- file names properly captured when using CLJS (also clean up some CLJS compilation warnings).
+
 ## 0.1.4 - 2017-10-19
 ### Added
 - sc.api now requires its own macros in CLJS, making it easier to use in ClojureScript
