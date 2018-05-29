@@ -110,6 +110,12 @@
   ([expr] (brk-emit nil expr &env &form))
   ([opts expr] (brk-emit opts expr &env &form)))
 
+(defn last-ep-id
+  "Returns the id of the last saved Execution Point, in [ep-id cs-id] form.
+  Throws an Exception if no Execution Point has been saved."
+  []
+  (i/last-ep-id))
+
 (defn ep-info
   "Given an Execution Point Id,
   returns a map of information about that Execution Point,
@@ -131,9 +137,23 @@
   A map which keys are the fully-qualified names of the dynamic Vars recorded
   for the Code Site, and which values are the values they were bound to at
   the Execution Point.
-  "
-  [ep-id]
-  (i/ep-info ep-id))
+
+  As a convenience, when ep-id is not supplied, uses (sc.api/last-ep-id)."
+  ([]
+    (ep-info (last-ep-id)))
+  ([ep-id]
+   (i/ep-info ep-id)))
+
+(defn ep-value
+  "Returns the value that was saved at the Execution Point
+  identified by ep-id (or nil if none was saved).
+  Shorthand for (:sc.ep/value (sc.api/ep-info ep-id)).
+
+  As a convenience, when ep-id is not supplied, uses (sc.api/last-ep-id)."
+  ([]
+   (ep-value (last-ep-id)))
+  ([ep-id]
+    (:sc.ep/value (ep-info ep-id))))
 
 (defn cs-info
   "Given a Code Site Id, retrieves a map of information about that Code Site,
@@ -246,25 +266,40 @@
 (defn loose
   "Given an Execution Point Id `ep-id` for an Execution Point
   created by `brk` which is currently in a suspended state,
-  resumes execution by evaluating the wrapped form."
-  [ep-id]
-  (i/brk-send-resume-cmd ep-id {:sc.brk/type :sc.brk.type/loose}))
+  resumes execution by evaluating the wrapped form.
+
+  As a convenience, when ep-id is not supplied, uses (sc.api/last-ep-id)."
+  ([]
+    (loose (last-ep-id)))
+  ([ep-id]
+   (i/brk-send-resume-cmd ep-id
+     {:sc.brk/type :sc.brk.type/loose})))
 
 (defn loose-with
   "Same as `sc.api/loose`, except that execution is resumed by
   yielding the provided value `v` instead of evaluating the wrapped
-  expression."
-  [ep-id v]
-  (i/brk-send-resume-cmd ep-id {:sc.brk/type :sc.brk.type/loose-with
-                          :sc.brk/loose-value v}))
+  expression.
+
+  As a convenience, when ep-id is not supplied, uses (sc.api/last-ep-id)."
+  ([v]
+    (loose-with (last-ep-id) v))
+  ([ep-id v]
+   (i/brk-send-resume-cmd ep-id
+     {:sc.brk/type :sc.brk.type/loose-with
+      :sc.brk/loose-value v})))
 
 (defn loose-with-err
   "Same as `sc.api/loose`, except that execution is resumed by
   throwing `err` instead of evaluating the wrapped
-  expression."
-  [ep-id err]
-  (i/brk-send-resume-cmd ep-id {:sc.brk/type :sc.brk.type/loose-with-err
-                          :sc.brk/loose-error err}))
+  expression.
+
+  As a convenience, when ep-id is not supplied, uses (sc.api/last-ep-id)."
+  ([err]
+    (loose-with-err (last-ep-id) err))
+  ([ep-id err]
+   (i/brk-send-resume-cmd ep-id
+     {:sc.brk/type :sc.brk.type/loose-with-err
+      :sc.brk/loose-error err})))
 
 (defn disable!
   "Disables all logging, recording, and blocking behaviour at a Code Site.

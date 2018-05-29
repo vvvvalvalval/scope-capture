@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+### Added
+- sc.api/last-ep-id
+- sc.api/ep-info now accepts ep-id in both integer and vector form
+- New arities for sc.api/ep-info and sc.api/loose(-...), which defaults to last-ep-id
+- sc.api/ep-value convenience function.
+- better validation and error reporting.
 ### Fixed
 - Fixed typo causing save-ep to save bad data.
 - file names properly captured when using CLJS (also clean up some CLJS compilation warnings).

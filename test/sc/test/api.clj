@@ -63,6 +63,11 @@
             ep-pre @a_pre
             ep-id (:sc.ep/id ep-pre)
             ep-post @a_post]
+        (testing "sc.api/last-ep-id returns the recorded Execution Point id"
+          (let [csid (:sc.cs/id cs-data)]
+            (is (=
+                  (sc.api/last-ep-id)
+                  [ep-id csid]))))
         (testing "logged the appropriate runtime pre-eval data"
           (is (and (integer? ep-id) (pos? ep-id)))
           (is (= (:sc.ep/code-site ep-pre) cs-data))
@@ -89,6 +94,9 @@
         (testing "the information is later available via ep-info"
           (is (=
                 (sc.api/ep-info ep-id)
+                ep-post))
+          (is (=
+                (sc.api/ep-info [ep-id (:sc.cs/id cs-data)])
                 ep-post)))
         (testing "letsc recreates the context by binding locals and dynamic vars"
           (is (= (zipmap
@@ -176,6 +184,11 @@
                       (f 1 false)))
               ep-pre (deref p_pre 100 nil)
               ep-id (:sc.ep/id ep-pre)]
+          (testing "sc.api/last-ep-id returns the recorded Execution Point id"
+            (let [csid (:sc.cs/id cs-data)]
+              (is (=
+                    (sc.api/last-ep-id)
+                    [ep-id csid]))))
           (testing "brk suspended execution"
             (is (not (realized? fut))))
           (testing "logged the appropriate runtime pre-eval data"

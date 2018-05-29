@@ -11,10 +11,67 @@
   []
   (swap! db/ep-id inc))
 
+(defn last-ep-id*
+  [db]
+  (let [eps (get db :execution-points)]
+    (if (empty? db)
+      (throw (ex-info
+               "No Execution Point has been saved yet."
+               {:sc.api.error/error-type
+                :sc.api.error-types/no-ep-saved-yet}))
+      (let [[epid ep-v] (apply max-key first eps)]
+        [epid (-> ep-v :sc.ep/code-site :sc.cs/id)]))))
+
+(defn last-ep-id
+  []
+  (last-ep-id* @db/db))
+
+(defn valid-ep-identifier?
+  [v]
+  (or
+    (and
+      (integer? v)
+      (pos? v))
+    (and
+      (vector? v)
+      (let [[ep-id cs-id] v]
+        (and
+          (integer? ep-id) (pos? ep-id)
+          (integer? cs-id) (neg? cs-id))))
+    ))
+
+(defn validate-ep-identifier
+  [ep-id]
+  (when-not (valid-ep-identifier? ep-id)
+    (throw (ex-info
+             (str
+               "ep-id should be either a positive number or a [(positive-number) (negative-number)] tuple, got: "
+               (try
+                 (pr-str ep-id)
+                 (catch Throwable err
+                   "(failed to print)")))
+             {:sc.api.error/error-type
+              :sc.api.error-types/invalid-ep-id
+              :ep-id ep-id}))))
+
+(defn resolve-ep-id
+  "Validates ep-id to an Execution Point id (in integer or vector form)
+  and normalizes it to integer form."
+  [ep-id]
+  (validate-ep-identifier ep-id)
+  (cond
+    (vector? ep-id) (first ep-id)
+    :else ep-id))
+
 (defn find-ep
   [db ep-id]
-  (-> db :execution-points (get ep-id)
-    (or (throw (ex-info (str "No Execution Point with ID " ep-id) {:sc.ep/id ep-id})))))
+  (let [epid (resolve-ep-id ep-id)]
+    (-> db :execution-points (get epid)
+      (or (throw (ex-info (str "No Execution Point with ID " epid)
+                   {:sc.api.error/error-type
+                    :sc.api.error-types/no-ep-found-with-id
+                    :sc.ep/id epid
+                    :ep-id ep-id}))))))
 
 (defn read-ep-info
   [db ep-id]
@@ -32,7 +89,10 @@
 (defn read-cs-info
   [db cs-id]
   (-> db :code-sites (get cs-id)
-    (or (throw (ex-info (str "No Code Site found with id " cs-id) {:sc.cs/id cs-id})))))
+    (or (throw (ex-info (str "No Code Site found with id " cs-id)
+                 {:sc.api.error/error-type
+                  :sc.api.error-types/no-cs-found-with-id
+                  :sc.cs/id cs-id})))))
 
 (defn cs-info
   [cs-id]
@@ -176,7 +236,9 @@
        p)
 
      :cljs
-     (throw (ex-info "BRK not supported on ClojureScript." {}))))
+     (throw (ex-info "BRK not supported on ClojureScript."
+              {:sc.api.error/error-type
+               :sc.api.error-types/brk-not-suppored-on-cljs}))))
 
 (defn brk-emit
   [opts expr amp-env amp-form]
@@ -204,7 +266,8 @@
                                  {:sc.brk/type :sc.brk.type/loose}
                                  (deref p#))]
                       (if (nil? cmd#)
-                        (throw (ex-info "BRK channel was closed." {:sc.ep/id ~ep-id-s}))
+                        (throw (ex-info "BRK channel was closed."
+                                 {:sc.ep/id ~ep-id-s}))
                         (case (:sc.brk/type cmd#)
                           :sc.brk.type/loose
                           ~expr
@@ -215,8 +278,11 @@
                           :sc.brk.type/loose-with-err
                           (throw (:sc.brk/loose-error cmd#))
 
-                          (throw (ex-info "Malformed BRK command" {:sc.ep/id ~ep-id-s
-                                                                   :cmd cmd#}))))
+                          (throw (ex-info "Malformed BRK command"
+                                   {:sc.api.error/error-type
+                                    :sc.api.error-types/malformed-brk-command
+                                    :sc.ep/id ~ep-id-s
+                                    :cmd cmd#}))))
                       )]
              (when-not cs-disabled?#
                (save-and-log-v ~brk-post-eval-logger ~ep-id-s false v#))
@@ -233,28 +299,11 @@
   [ep-id cmd]
   ((-> (find-ep @db/db ep-id)
      :sc.ep/private :sc.ep/brk-send-resume-cmd
-     (or (throw (ex-info "This Execution Point was not created via sc.api/brk" {:ep-id ep-id}))))
+     (or (throw (ex-info "This Execution Point was not created via sc.api/brk"
+                  {:sc.api.error/error-type
+                   :sc.api.error-types/ep-not-created-via-brk
+                   :ep-id ep-id}))))
     cmd))
-
-(defn valid-ep-identifier?
-  [v]
-  (or
-    (and
-      (integer? v)
-      (pos? v))
-    (and
-      (vector? v)
-      (let [[ep-id cs-id] v]
-        (and
-          (integer? ep-id) (pos? ep-id)
-          (integer? cs-id) (neg? cs-id))))
-    ))
-
-(defn validate-ep-identifier
-  [ep-id]
-  (when-not (valid-ep-identifier? ep-id)
-    (throw (ex-info "ep-id should be either a positive number or a [(positive-number) (negative-number)] tuple."
-             {:ep-id ep-id}))))
 
 (defn resolve-code-site
   [ep-id]
@@ -278,12 +327,6 @@
   (-> (find-ep @db/db ep-id)
     :sc.ep/dynamic-var-bindings (get var-name)))
 
-(defn resolve-ep-id
-  [ep-id]
-  (cond
-    (vector? ep-id) (first ep-id)
-    :else ep-id))
-
 (defn disable!
   [cs-id]
   (swap! db/db assoc-in [:code-sites cs-id :sc.cs/disabled] true)
@@ -296,10 +339,11 @@
 
 (defn dispose!
   [ep-id]
-  (when-let [f (get-in @db/db [:execution-points ep-id :sc.ep/private :sc.ep/brk-send-resume-cmd])]
-    (f nil))
-  (swap! db/db update :execution-points dissoc ep-id)
-  nil)
+  (let [epid (resolve-ep-id ep-id)]
+    (when-let [f (get-in @db/db [:execution-points epid :sc.ep/private :sc.ep/brk-send-resume-cmd])]
+      (f nil))
+    (swap! db/db update :execution-points dissoc epid)
+    nil))
 
 (defn dispose-all!
   []
