@@ -348,7 +348,7 @@
 (defn dispose-all!
   []
   (->> @db/db :execution-points
-    (map :sc.ep/id)
+    keys
     (run! dispose!)))
 
 (defn save-ep
