@@ -315,6 +315,6 @@
   (swap! db/db update-in [:execution-points ep-id]
     (fn [old-ep]
       (-> ep-data
-        (assoc :ep.sc/id ep-id)
-        (assoc :ep.sc/private (:sc.ep/private old-ep))
+        (assoc :sc.ep/id ep-id)
+        (assoc :sc.ep/private (:sc.ep/private old-ep))
         (update :sc.ep/code-site #(select-keys % [:sc.cs/id]))))))

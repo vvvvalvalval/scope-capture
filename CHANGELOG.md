@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 ### Fixed
+- Fixed typo causing save-ep to save bad data.
 - file names properly captured when using CLJS (also clean up some CLJS compilation warnings).
 
 ## 0.1.4 - 2017-10-19
