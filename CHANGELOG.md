@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+### Fixed
+- Fixed bug causing dispose-all! to fail systematically
+
 ## 0.2.0 - 2018-05-29
 ### Added
 - sc.api/last-ep-id
