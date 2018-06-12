@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+### 0.2.1 - 2018-06-12
 ### Fixed
 - Fixed bug causing dispose-all! to fail systematically
 
@@ -41,7 +42,8 @@ All notable changes to this project will be documented in this file. This change
 - Docstrings
 - Tutorial
 
-[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/vvvvalvalval/scope-capture/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.2...v0.1.3
