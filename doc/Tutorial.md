@@ -394,3 +394,37 @@ SC[1 -1]=> x
 SC[1 -1]=> :repl/quit
 user=>
 ```
+
+## Spying at a distance (advanced)
+
+Sometimes, you want to spy at a given Code Site, but only in a very specific context.
+
+For instance, imagine you want investigate an Exception thrown in a function `f`;
+ when reproducing the bug, you may see that `f` gets called from many places, but
+ the error only happens when it's called from function `g`. If you place a
+ `(sc.api/spy ...)` call inside `f` to investigate, most of the recorded Execution Points
+ will be useless noise to you, because you're only interested in what happens downstream
+ of `g`.
+
+For such cases, you can use the `sc.api/calling-from` macro and
+ `:sc/only-from` option to only spy / brk downstream of a specific place in your code:
+
+```clojure
+(defn f
+  "A fairly generic function that gets called from many places."
+  [x]
+  ;; ...
+  (sc.api/spy `{:sc/only-from :foo}
+    ...)
+  ;; ...
+  )
+
+;; [...]
+
+(defn g []
+  ;; ...
+  (sc.api/calling-from :foo
+    (f ...))
+  ;; ...
+  )
+```

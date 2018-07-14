@@ -162,6 +162,14 @@
   [cs-id]
   (get-in @db/db [:code-sites cs-id :sc.cs/disabled]))
 
+(defn should-capture?
+  [cs-id only-from]
+  (not
+    (or
+      (cs-disabled? cs-id)
+      (when (some? only-from)
+        (not= sc.api.from/*from* only-from)))))
+
 (defn save-v
   [ep-id err? v]
   (read-ep-info
@@ -178,8 +186,8 @@
   nil)
 
 (defn emit-save-scope
-  [logger-fn ep-id-s cs-data]
-  `(when-not (cs-disabled? ~(:sc.cs/id cs-data))
+  [logger-fn ep-id-s cs-data only-from]
+  `(when (should-capture? ~(:sc.cs/id cs-data) ~only-from)
      (save-and-log-ep-scope
        ~logger-fn
        ~ep-id-s
@@ -199,6 +207,7 @@
         {cs-logger-id :sc/spy-cs-logger-id
          spy-pre-eval-logger :sc/spy-ep-pre-eval-logger
          spy-post-eval-logger :sc/spy-ep-post-eval-logger
+         only-from :sc/only-from
          :or {cs-logger-id :sc.api.logging/log-spy-cs
               spy-pre-eval-logger `sc.api.logging/log-spy-ep-pre-eval
               spy-post-eval-logger `sc.api.logging/log-spy-ep-post-eval
@@ -210,17 +219,17 @@
     (let [local-names (:sc.cs/local-names cs-data)
           ep-id-s (gensym "ep-id")]
       `(let [~ep-id-s (gen-ep-id)]
-         ~(emit-save-scope spy-pre-eval-logger ep-id-s cs-data)
+         ~(emit-save-scope spy-pre-eval-logger ep-id-s cs-data only-from)
          ~(when expr
             `(try
                (let [v# ~expr]
-                 (when-not (cs-disabled? ~(:sc.cs/id cs-data))
+                 (when (should-capture? ~(:sc.cs/id cs-data) ~only-from)
                    (save-and-log-v ~spy-post-eval-logger ~ep-id-s false v#))
                  v#)
                (catch ~(case cp-target
                          :clj 'java.lang.Throwable
                          :cljs `:default) err#
-                 (when-not (cs-disabled? ~(:sc.cs/id cs-data))
+                 (when (should-capture? ~(:sc.cs/id cs-data) ~only-from)
                    (save-and-log-v ~spy-post-eval-logger ~ep-id-s true err#))
                  (throw err#))))))
     ))
@@ -246,6 +255,7 @@
         {cs-logger-id :sc/brk-cs-logger-id
          brk-pre-eval-logger :sc/brk-ep-pre-eval-logger
          brk-post-eval-logger :sc/brk-ep-post-eval-logger
+         only-from :sc/only-from
          :or {cs-logger-id :sc.api.logging/log-brk-cs
               brk-pre-eval-logger `sc.api.logging/log-brk-ep-pre-eval
               brk-post-eval-logger `sc.api.logging/log-brk-ep-post-eval
@@ -258,13 +268,13 @@
           ep-id-s (gensym "ep-id")]
       `(let [~ep-id-s (gen-ep-id)]
          (try
-           (let [cs-disabled?# (cs-disabled? ~cs-id)
-                 p# (when-not cs-disabled?#
+           (let [should-capture?# (should-capture? ~cs-id ~only-from)
+                 p# (when should-capture?#
                        (add-ep-brk-port ~ep-id-s))
-                 _# ~(emit-save-scope brk-pre-eval-logger ep-id-s cs-data)
-                 v# (let [cmd# (if cs-disabled?#
-                                 {:sc.brk/type :sc.brk.type/loose}
-                                 (deref p#))]
+                 _# ~(emit-save-scope brk-pre-eval-logger ep-id-s cs-data only-from)
+                 v# (let [cmd# (if should-capture?#
+                                 (deref p#)
+                                 {:sc.brk/type :sc.brk.type/loose})]
                       (if (nil? cmd#)
                         (throw (ex-info "BRK channel was closed."
                                  {:sc.ep/id ~ep-id-s}))
@@ -284,13 +294,13 @@
                                     :sc.ep/id ~ep-id-s
                                     :cmd cmd#}))))
                       )]
-             (when-not cs-disabled?#
+             (when should-capture?#
                (save-and-log-v ~brk-post-eval-logger ~ep-id-s false v#))
              v#)
            (catch ~(case cp-target
                      :clj 'java.lang.Throwable
                      :cljs `:default) err#
-             (when-not (cs-disabled? ~(:sc.cs/id cs-data))
+             (when (should-capture? ~(:sc.cs/id cs-data) ~only-from)
                (save-and-log-v ~brk-post-eval-logger ~ep-id-s true err#))
              (throw err#)))))
     ))

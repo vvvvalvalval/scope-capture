@@ -1,6 +1,7 @@
 (ns sc.api
   (:require [sc.impl :as i]
-            [sc.api.logging])
+            [sc.api.logging]
+            [sc.api.from])
   #?(:cljs (:require-macros sc.api)))
 
 (defn spy-emit
@@ -55,6 +56,12 @@
   The names of the dynamic Vars which bindings should be captured at evaluation
   time.
 
+  - :sc/only-from (expression, defaults to nil)
+  When set, recording and logging will only occur when the Dynamic Var sc.api.from/*from*
+  holds the same value as the :sc/only-from expression (typically a keyword).
+  Useful in generic functions, for only spying downstream of some caller.
+  See also: sc.api/calling-from.
+
   You may also provide your own defaults for these options by defining
   your own version of the `spy` macro: to do that,
   use `sc.api/spy-emit`.
@@ -106,6 +113,7 @@
   - :sc/brk-ep-pre-eval-logger
   - :sc/brk-ep-post-eval-logger
   - :sc/dynamic-vars
+  - :sc/only-from
 
   You can completely disable the logging, recording, and blocking behaviour of `spy`
   at a given Code Site by using `(cs.api/disable! cs-id)`.
@@ -373,5 +381,10 @@
   [ep-id ep-data]
   (i/save-ep ep-id ep-data))
 
-
+(defmacro calling-from
+  "Binds sc.api.from/*from* to `from-v`;
+  to be used in combination with the :sc/only-from option."
+  [from-v & body]
+  `(binding [sc.api.from/*from* ~from-v]
+     ~@body))
 

@@ -9,10 +9,10 @@
   (fn [cs-data]))
 
 (def ^:dynamic pre-eval-logger
-  (fn [cs-data]))
+  (fn [ep-data]))
 
 (def ^:dynamic post-eval-logger
-  (fn [cs-data]))
+  (fn [ep-data]))
 
 (sc.api.logging/register-cs-logger ::test-logger
   (fn [cs-data]
@@ -297,3 +297,130 @@
                 (is (= (:sc.ep/error ep-post) err)))))
           ))))
   )
+
+(deftest calling-from--example
+  (testing "with spy"
+    (let [code
+          `(fn f []
+             (sc.api/spy
+               {:sc/only-from 42
+
+                :sc/spy-cs-logger-id ::test-logger
+                :sc/spy-ep-pre-eval-logger pre-eval-logger
+                :sc/spy-ep-post-eval-logger post-eval-logger}
+               nil))
+          f (eval code)
+          logged-when-f-called?
+          (fn []
+            (let [a (atom false)]
+              (binding [pre-eval-logger
+                        (fn [_] (reset! a true))]
+                (f))
+              @a))]
+      (testing "without calling-from"
+        (is (false? (logged-when-f-called?))))
+      (testing "calling-from with the right value"
+        (is (true?
+              (sc.api/calling-from 42
+                (logged-when-f-called?))))
+        (is (true?
+              (sc.api/calling-from (* 2 21)
+                (logged-when-f-called?)))))
+      (testing "calling-from with the wrong value"
+        (is (false?
+              (sc.api/calling-from :wrong
+                (logged-when-f-called?))))
+        (is (false?
+              (sc.api/calling-from nil
+                (logged-when-f-called?))))))
+    (testing "When :sc/only-from is nil, ignored"
+      (let [code
+            `(fn f []
+               (sc.api/spy
+                 {:sc/only-from nil
+
+                  :sc/spy-cs-logger-id ::test-logger
+                  :sc/spy-ep-pre-eval-logger pre-eval-logger
+                  :sc/spy-ep-post-eval-logger post-eval-logger}
+                 nil))
+            f (eval code)
+            logged-when-f-called?
+            (fn []
+              (let [a (atom false)]
+                (binding [pre-eval-logger
+                          (fn [_] (reset! a true))]
+                  (f))
+                @a))]
+        (testing "without calling-from"
+          (is
+            (true?
+              (logged-when-f-called?))))
+        (testing "with calling-from"
+          (are [from]
+            (true?
+              (logged-when-f-called?))
+            nil 42 :hello "foo" false)))))
+  (testing "with brk"
+    (let [code
+          `(fn f []
+             (sc.api/brk
+               {:sc/only-from 42
+
+                :sc/brk-cs-logger-id ::test-logger
+                :sc/brk-ep-pre-eval-logger pre-eval-logger
+                :sc/brk-ep-post-eval-logger post-eval-logger}
+               nil))
+          f (eval code)
+          logged-when-f-called?
+          (fn []
+            (let [p (promise)]
+              (binding [pre-eval-logger
+                        (fn [_] (deliver p true))]
+                (future
+                  (f)))
+              (deref p 10 false)))]
+      (testing "without calling-from"
+        (is (false? (logged-when-f-called?))))
+      (testing "calling-from with the right value"
+        (is (true?
+              (sc.api/calling-from 42
+                (logged-when-f-called?))))
+        (is (true?
+              (sc.api/calling-from (* 2 21)
+                (logged-when-f-called?)))))
+      (testing "calling-from with the wrong value"
+        (is (false?
+              (sc.api/calling-from :wrong
+                (logged-when-f-called?))))
+        (is (false?
+              (sc.api/calling-from nil
+                (logged-when-f-called?))))))
+    (testing "When :sc/only-from is nil, ignored"
+      (let [code
+            `(fn f []
+               (sc.api/brk
+                 {:sc/only-from nil
+
+                  :sc/brk-cs-logger-id ::test-logger
+                  :sc/brk-ep-pre-eval-logger pre-eval-logger
+                  :sc/brk-ep-post-eval-logger post-eval-logger}
+                 nil))
+            f (eval code)
+            logged-when-f-called?
+            (fn []
+              (let [p (promise)]
+                (binding [pre-eval-logger
+                          (fn [_] (deliver p true))]
+                  (future (f)))
+                (deref p 10 false)))]
+        (testing "without calling-from"
+          (is
+            (true?
+              (logged-when-f-called?))))
+        (testing "with calling-from"
+          (are [from]
+            (true?
+              (logged-when-f-called?))
+            nil 42 :hello "foo" false))))
+    ))
+
