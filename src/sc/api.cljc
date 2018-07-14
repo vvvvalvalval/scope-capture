@@ -1,5 +1,6 @@
 (ns sc.api
-  (:require [sc.impl :as i])
+  (:require [sc.impl :as i]
+            [sc.api.logging])
   #?(:cljs (:require-macros sc.api)))
 
 (defn spy-emit
@@ -68,6 +69,17 @@
   ([expr] (spy-emit nil expr &env &form))
   ([opts expr] (spy-emit opts expr &env &form)))
 
+(def ^:private spyqt-opts
+  `{:sc/spy-ep-post-eval-logger sc.api.logging/log-spy-ep-post-eval--quiet})
+
+(defmacro spyqt
+  "'Spy QuieTly' - like sc.api/spy but less verbose.
+  Will not print the :sc.ep/value, :sc.ep/error nor :sc.cs/expr;
+  useful when dealing with large values."
+  ([] (spy-emit spyqt-opts nil &env &form))
+  ([expr] (spy-emit spyqt-opts expr &env &form))
+  ([opts expr] (spy-emit (merge spyqt-opts opts) expr &env &form)))
+
 (defn brk-emit
   "Helper function for implementing (your own version of) the
   `brk` macro. See the source of `brk` for a usage example."
@@ -109,6 +121,17 @@
   ([] (brk-emit nil nil &env &form))
   ([expr] (brk-emit nil expr &env &form))
   ([opts expr] (brk-emit opts expr &env &form)))
+
+(def ^:private brkqt-opts
+  `{:sc/brk-ep-post-eval-logger sc.api.logging/log-brk-ep-post-eval--quiet})
+
+(defmacro brkqt
+  "'BReaK QuieTly' - like sc.api/brk but less verbose.
+  Will not print the :sc.ep/value, :sc.ep/error nor :sc.cs/expr;
+  useful when dealing with large values."
+  ([] (brk-emit brkqt-opts nil &env &form))
+  ([expr] (brk-emit brkqt-opts expr &env &form))
+  ([opts expr] (brk-emit (merge brkqt-opts opts) expr &env &form)))
 
 (defn last-ep-id
   "Returns the id of the last saved Execution Point, in [ep-id cs-id] form.

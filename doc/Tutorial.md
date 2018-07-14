@@ -319,6 +319,16 @@ Therefore, when using the `defsc` and `letsc` macros, you need to explicitly pas
   ...)
 ```
 
+## Dealing with large outputs: `spyqt` and `brkqt`
+
+By default, `sc.api/spy` and `sc.api/brk` will print the recorded expression and values in their entirety; this can
+ become cumbersome when the values are large (or infinite).
+
+In such cases, you can use the more 'quiet' alternatives: `sc.api/spyqt` and `sc.api/brkqt`, which only print the type
+ of the recorded values.
+
+Their source code also provides a basic example of custom logging (see [below](#customization)).
+
 ## Customization
 
 You can customize the behaviour of `spy` and `brk` by defining your own macros that call 

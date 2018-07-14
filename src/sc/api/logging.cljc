@@ -68,7 +68,24 @@
           :else
           "")))))
 
-
+(defn log-spy-ep-post-eval--quiet
+  [ep]
+  (let [cs (:sc.ep/code-site ep)]
+    (println "SPY"
+      (epid-info ep)
+      (source-info cs)
+      (str
+        "\n"
+        (let [expr-repr (if (symbol? (:sc.cs/expr cs))
+                          (pr-str (:sc.cs/expr cs))
+                          "<<saved-value>>")]
+          (cond
+            (:sc.ep/value ep)
+            (str "(type " expr-repr ") => " (pr-str (type (:sc.ep/value ep))))
+            (:sc.ep/error ep)
+            (str expr-repr " threw a " (pr-str (type (:sc.ep/error ep))))
+            :else
+            ""))))))
 
 (defn log-brk-ep-pre-eval
   [ep]
@@ -98,5 +115,24 @@
           (str "\nthrew\n" (pr-str (:sc.ep/error ep)))
           :else
           "")))))
+
+(defn log-brk-ep-post-eval--quiet
+  [ep]
+  (let [cs (:sc.ep/code-site ep)]
+    (println "BRK"
+      (epid-info ep)
+      (source-info cs)
+      (str
+        "\n"
+        (let [expr-repr (if (symbol? (:sc.cs/expr cs))
+                          (pr-str (:sc.cs/expr cs))
+                          "<<saved-value>>")]
+          (cond
+            (:sc.ep/value ep)
+            (str "(type " expr-repr ") => " (pr-str (type (:sc.ep/value ep))))
+            (:sc.ep/error ep)
+            (str expr-repr " threw a " (pr-str (type (:sc.ep/error ep))))
+            :else
+            ""))))))
 
 
