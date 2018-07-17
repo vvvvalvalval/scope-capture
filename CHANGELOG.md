@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
+### 0.2.2 - 2018-07-17
 ### Added
 - spyqt / brkqt: less verbose counterparts to spy / brk
 - sc.api/calling-from and :sc/called-from option
@@ -45,7 +46,8 @@ All notable changes to this project will be documented in this file. This change
 - Docstrings
 - Tutorial
 
-[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/vvvvalvalval/scope-capture/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/vvvvalvalval/scope-capture/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/vvvvalvalval/scope-capture/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.4...v0.2.0
 [0.1.4]: https://github.com/vvvvalvalval/scope-capture/compare/v0.1.3...v0.1.4
