@@ -303,7 +303,7 @@
     (let [code
           `(fn f []
              (sc.api/spy
-               {:sc/only-from 42
+               {:sc/called-from 42
 
                 :sc/spy-cs-logger-id ::test-logger
                 :sc/spy-ep-pre-eval-logger pre-eval-logger
@@ -333,11 +333,11 @@
         (is (false?
               (sc.api/calling-from nil
                 (logged-when-f-called?))))))
-    (testing "When :sc/only-from is nil, ignored"
+    (testing "When :sc/called-from is nil, ignored"
       (let [code
             `(fn f []
                (sc.api/spy
-                 {:sc/only-from nil
+                 {:sc/called-from nil
 
                   :sc/spy-cs-logger-id ::test-logger
                   :sc/spy-ep-pre-eval-logger pre-eval-logger
@@ -364,7 +364,7 @@
     (let [code
           `(fn f []
              (sc.api/brk
-               {:sc/only-from 42
+               {:sc/called-from 42
 
                 :sc/brk-cs-logger-id ::test-logger
                 :sc/brk-ep-pre-eval-logger pre-eval-logger
@@ -395,11 +395,11 @@
         (is (false?
               (sc.api/calling-from nil
                 (logged-when-f-called?))))))
-    (testing "When :sc/only-from is nil, ignored"
+    (testing "When :sc/called-from is nil, ignored"
       (let [code
             `(fn f []
                (sc.api/brk
-                 {:sc/only-from nil
+                 {:sc/called-from nil
 
                   :sc/brk-cs-logger-id ::test-logger
                   :sc/brk-ep-pre-eval-logger pre-eval-logger

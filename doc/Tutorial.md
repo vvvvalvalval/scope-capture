@@ -407,14 +407,14 @@ For instance, imagine you want investigate an Exception thrown in a function `f`
  of `g`.
 
 For such cases, you can use the `sc.api/calling-from` macro and
- `:sc/only-from` option to only spy / brk downstream of a specific place in your code:
+ `:sc/called-from` option to only spy / brk downstream of a specific place in your code:
 
 ```clojure
 (defn f
   "A fairly generic function that gets called from many places."
   [x]
   ;; ...
-  (sc.api/spy `{:sc/only-from :foo}
+  (sc.api/spy `{:sc/called-from :foo}
     ...)
   ;; ...
   )

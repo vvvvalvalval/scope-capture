@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. This change
 ## [Unreleased]
 ### Added
 - spyqt / brkqt: less verbose counterparts to spy / brk
-- sc.api/calling-from and :sc/only-from option
+- sc.api/calling-from and :sc/called-from option
 
 ### 0.2.1 - 2018-06-12
 ### Fixed

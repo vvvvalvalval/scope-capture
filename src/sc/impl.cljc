@@ -168,7 +168,7 @@
     (or
       (cs-disabled? cs-id)
       (when (some? only-from)
-        (not= sc.api.from/*from* only-from)))))
+        (not= sc.api.from/*caller* only-from)))))
 
 (defn save-v
   [ep-id err? v]
@@ -207,7 +207,7 @@
         {cs-logger-id :sc/spy-cs-logger-id
          spy-pre-eval-logger :sc/spy-ep-pre-eval-logger
          spy-post-eval-logger :sc/spy-ep-post-eval-logger
-         only-from :sc/only-from
+         only-from :sc/called-from
          :or {cs-logger-id :sc.api.logging/log-spy-cs
               spy-pre-eval-logger `sc.api.logging/log-spy-ep-pre-eval
               spy-post-eval-logger `sc.api.logging/log-spy-ep-post-eval
@@ -255,7 +255,7 @@
         {cs-logger-id :sc/brk-cs-logger-id
          brk-pre-eval-logger :sc/brk-ep-pre-eval-logger
          brk-post-eval-logger :sc/brk-ep-post-eval-logger
-         only-from :sc/only-from
+         only-from :sc/called-from
          :or {cs-logger-id :sc.api.logging/log-brk-cs
               brk-pre-eval-logger `sc.api.logging/log-brk-ep-pre-eval
               brk-post-eval-logger `sc.api.logging/log-brk-ep-post-eval

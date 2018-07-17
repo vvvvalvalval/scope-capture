@@ -56,9 +56,9 @@
   The names of the dynamic Vars which bindings should be captured at evaluation
   time.
 
-  - :sc/only-from (expression, defaults to nil)
+  - :sc/called-from (expression, defaults to nil)
   When set, recording and logging will only occur when the Dynamic Var sc.api.from/*from*
-  holds the same value as the :sc/only-from expression (typically a keyword).
+  holds the same value as the :sc/called-from expression (typically a keyword).
   Useful in generic functions, for only spying downstream of some caller.
   See also: sc.api/calling-from.
 
@@ -113,7 +113,7 @@
   - :sc/brk-ep-pre-eval-logger
   - :sc/brk-ep-post-eval-logger
   - :sc/dynamic-vars
-  - :sc/only-from
+  - :sc/called-from
 
   You can completely disable the logging, recording, and blocking behaviour of `spy`
   at a given Code Site by using `(cs.api/disable! cs-id)`.
@@ -382,9 +382,19 @@
   (i/save-ep ep-id ep-data))
 
 (defmacro calling-from
-  "Binds sc.api.from/*from* to `from-v`;
-  to be used in combination with the :sc/only-from option."
+  "Binds sc.api.from/*caller* to `from-v`; to be used in combination with the :sc/called-from option.
+
+  When a Code Site has the :sc/called-from option set to a non-nil value `v`,
+  (e.g via a SPY call of the form `(sc.api/spy `{:sc/called-from :foo} MY-EXPR)`)
+  logging and recording of Execution Points at this Code Site will only occur
+  when the Dynamic Var `sc.api.from/*caller*` is bound to `v`.
+
+  Any non-nil value is legal for `from-v`; you'll typically use a keyword, number or boolean.
+
+  Use this when you're only interested in the executions of a Code Site that
+  are invoked from a given other place in your code
+  (which you wrap with `(sc.api/calling-from ...)`)"
   [from-v & body]
-  `(binding [sc.api.from/*from* ~from-v]
+  `(binding [sc.api.from/*caller* ~from-v]
      ~@body))
 
