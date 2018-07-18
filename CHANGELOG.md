@@ -2,12 +2,18 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [Unreleased]
-### 0.3.0 - 2018-07-17
+
+## 0.3.0 - 2018-07-18
+### Fixed
+- Missing require in impl.cljc
+- Fixed error thrown by last-ep-id when no EP saved yet
+
+## 0.3.0 - 2018-07-17
 ### Added
 - spyqt / brkqt: less verbose counterparts to spy / brk
 - sc.api/calling-from and :sc/called-from option
 
-### 0.2.1 - 2018-06-12
+## 0.2.1 - 2018-06-12
 ### Fixed
 - Fixed bug causing dispose-all! to fail systematically
 

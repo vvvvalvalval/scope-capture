@@ -1,7 +1,8 @@
 (ns sc.impl
   (:require [sc.impl.db :as db]
             [sc.impl.logging :as il]
-            [sc.api.logging]))
+            [sc.api.logging]
+            [sc.api.from]))
 
 (defn gen-cs-id
   []
@@ -14,7 +15,7 @@
 (defn last-ep-id*
   [db]
   (let [eps (get db :execution-points)]
-    (if (empty? db)
+    (if (empty? eps)
       (throw (ex-info
                "No Execution Point has been saved yet."
                {:sc.api.error/error-type

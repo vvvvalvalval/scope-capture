@@ -11,4 +11,3 @@
           (sc.impl/last-ep-id* {:execution-points {}})
           (catch Throwable err
             (-> err ex-data :sc.api.error/error-type)))))))
-
