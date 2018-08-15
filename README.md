@@ -12,9 +12,13 @@ Project status: beta quality. On the other hand, you typically will only use it 
 
 [![Demo preview](https://i.vimeocdn.com/video/659566887.webp?mw=1000&mh=561)](https://vimeo.com/237220354)
 
+**[Talk at Clojure Days 2018:](https://www.youtube.com/watch?v=dCInpNWlZ4k)**
+
+[![Talk preview](https://img.youtube.com/vi/dCInpNWlZ4k/0.jpg)](http://www.youtube.com/watch?v=dCInpNWlZ4k)
+
 ## Rationale
 
-This library is designed to support the programming / debugging methodology advocated by Stuart Halloway in this blog post: [_REPL Debugging: No Stacktrace Required_](http://blog.cognitect.com/blog/2017/6/5/repl-debugging-no-stacktrace-required), which consists of: 
+This library is designed to support the programming / debugging methodology advocated by Stuart Halloway in this blog post: [_REPL Debugging: No Stacktrace Required_](http://blog.cognitect.com/blog/2017/6/5/repl-debugging-no-stacktrace-required), which consists of:
 
 1. recreating the environment in which a piece of code runs (using `def`s) 
 2. evaluating forms in the code buffer to narrow down the cause of the problem
