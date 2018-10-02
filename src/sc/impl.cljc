@@ -49,7 +49,7 @@
                "ep-id should be either a positive number or a [(positive-number) (negative-number)] tuple, got: "
                (try
                  (pr-str ep-id)
-                 (catch Throwable err
+                 (catch #?(:clj Throwable :cljs :default) err
                    "(failed to print)")))
              {:sc.api.error/error-type
               :sc.api.error-types/invalid-ep-id
