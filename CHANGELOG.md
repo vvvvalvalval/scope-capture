@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. This change
 ### Fixed
 - Wrapped Throwable in validate-ep-identifier with reader conditional
 
-## 0.3.0 - 2018-07-18
+## 0.3.1 - 2018-07-18
 ### Fixed
 - Missing require in impl.cljc
 - Fixed error thrown by last-ep-id when no EP saved yet
