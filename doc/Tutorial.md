@@ -296,7 +296,7 @@ You can disable the side-effects of the `spy` and `brk` macros at a given Code S
  by calling `sc.api/disable!`
  
 ```clojure 
-(sc.api/dispose! -2)
+(sc.api/disable! -2)
 ```
 
 This is useful if you placed a `(brk ...)` call inside a loop, and want to suspend
