@@ -16,6 +16,10 @@ Project status: beta quality. On the other hand, you typically will only use it 
 
 [![Talk preview](https://img.youtube.com/vi/dCInpNWlZ4k/0.jpg)](http://www.youtube.com/watch?v=dCInpNWlZ4k)
 
+## Similar libraries
+
+* [miracle.save](https://github.com/Saikyun/miracle.save) - capture arguments and results of function(s) in a namespace
+
 ## Rationale
 
 This library is designed to support the programming / debugging methodology advocated by Stuart Halloway in this blog post: [_REPL Debugging: No Stacktrace Required_](http://blog.cognitect.com/blog/2017/6/5/repl-debugging-no-stacktrace-required), which consists of:
