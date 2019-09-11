@@ -72,6 +72,10 @@ Using a `$BOOT_HOME/profile.boot` (usually `~/.boot/profile.boot`) file:
 (require 'sc.api)
 ```
 
+## Docs and API docs
+
+[![cljdoc badge](https://cljdoc.org/badge/vvvvalvalval/scope-capture)](https://cljdoc.org/d/vvvvalvalval/scope-capture/CURRENT)
+
 ## Usage
 
 (See also the **[detailed tutorial](doc/Tutorial.md)**)
