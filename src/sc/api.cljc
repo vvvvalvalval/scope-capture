@@ -268,6 +268,17 @@
              `(def ~ln (i/ep-binding ~ep-id (quote ~ln)))))
       (:sc.cs/local-names cs))))
 
+
+(defmacro letsc*
+  "Like `letsc`, but uses the most recently executed EP id."
+  [& body]
+  `(letsc ~(last-ep-id) ~@body))
+
+(defmacro defsc*
+  "Like `defsc`, but uses the most recently executed EP id."
+  []
+  `(defsc ~(last-ep-id)))
+
 (defmacro undefsc
   "Given an identifier `ep-or-cs-id` for a Code Site,
   undoes the effect of `defsc` by un`def`ing the Vars defined by `defsc`
