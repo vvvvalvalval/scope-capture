@@ -158,8 +158,10 @@ x
 => 12 
 ```
 
+Perhaps surprisingly, **`defsc` is the author's preferred way of recreating the scope.** It's usually not as dirty or dangerous as it looks.
+
 If your REPL supports it, you can also achive the same effect by launching a sub-REPL
-(won't work with nREPL)
+(won't work with nREPL):
 
 ```clojure
 (sc.repl/ep-repl 7)
@@ -200,6 +202,6 @@ For these reasons, using `sc.api/letsc` or a sub-REPL is generally more error-pr
 
 ## License
 
-Copyright © 2017 Valentin Waeselynck and contributors.
+Copyright © 2017-2020 Valentin Waeselynck and contributors.
 
 Distributed under the MIT license.
