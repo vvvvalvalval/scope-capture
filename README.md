@@ -200,6 +200,35 @@ Local/global name collisions:
 
 For these reasons, using `sc.api/letsc` or a sub-REPL is generally more error-proof than using `defsc`, although in many cases it is less practical.
 
+
+## Related tools
+
+_Dear tooling authors, if I failed to mention any of your tools, please submit a PR!_
+
+
+### Similar
+
+There are other Clojure tools that enable you to recreate the local context in your REPL:
+
+* **CIDER:** The [CIDER Debugger](https://docs.cider.mx/cider/debugging/debugger.html#keys) lets you evaluate code in the context of a breakpoint.
+* **Calva:** See [Evaluating code in the paused context](https://calva.io/debugger/#evaluating-code-in-the-paused-context)
+* **Proto-REPL:** See [Saving and viewing local bindings values](https://github.com/jasongilman/proto-repl#saving-and-viewing-local-binding-values)
+
+
+### Complementary
+
+`scope-capture` has a narrow focus: putting you in the shoes of your program through your REPL. It does not address other debugging concerns, such as visualizing data or observing execution: this can be achieved by complementing this library with other tools, such as _tracing_ libraries, data visualization UIs, pretty-printers, etc. See [the Clojure REPL guide](https://clojure.org/guides/repl/enhancing_your_repl_workflow) for an overview of REPL tools and techniques.
+
+
+### Analogous
+
+Here are tools that achieve a similar effect in other languages:
+
+* [Pry](https://github.com/pry/pry#runtime-invocation) (Ruby)
+* [ipdb](https://pypi.org/project/ipdb/) (Python)
+* the [Node.js Debugger](https://nodejs.org/api/debugger.html#debugger_debugger) offers a `repl` command to evaluate code at a breakpoint. (JavaScript - Node)
+
+
 ## License
 
 Copyright © 2017-2020 Valentin Waeselynck and contributors.
