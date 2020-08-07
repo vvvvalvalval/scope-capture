@@ -73,6 +73,7 @@ For example, you could use `defsc` twice to combine values saved from different 
 People have vastly different tastes and opportunities regarding their programming experience, what and how notifications should be displayed, etc.
 This is why `scope-capture` is designed to be [customizable](./Tutorial.md#customization) rather than opinionated on these aspects.
 
+
 ## Adding a reader macro shorthand
 
 For simple cases where you just want to wrap a form with `sc.api/spy`, instead of writing
@@ -80,27 +81,29 @@ For simple cases where you just want to wrap a form with `sc.api/spy`, instead o
 ```clojure
 (require 'sc.api)
 (sc.api/spy
-  (interesting-fn with args))
+  (my-very interesting expression))
 ```
 
 You can add a reader macro, and write it like this:
 
 ```clojure
-#spy/cap (interesting-fn with args)
+#sc/spy (my-very interesting expression)
 ```
 
 To add such a reader macro defined in your own `dev` namespace, you would add
 
 ```clojure
-{spy/cap dev/read-scope-capture}
+{sc/spy dev/read-sc-spy}
 ```
 
 To `data_readers.clj` at a root of the classpath, as described in [the `clojure.core/*data-readers*` docstring](https://clojuredocs.org/clojure.core/*data-readers*) (you could use `dev/data_readers.clj` if `dev` is a source-path for your development environment), and define the reader macro in your `dev` namespace:
 
 ```clojure
-(defn read-scope-capture [form]
+(defn read-sc-spy [form]
   (require 'sc.api)
   `(sc.api/spy ~form))
 ```
 
-Since the reader macro itself requires the namespace, you can now simply add `#spy/cap` before the form you wish to capture in any namespace, evaluate it, and execute it.
+Since the reader macro itself requires the namespace, you can now simply add `#sc/spy` before the form you wish to capture in any namespace, evaluate it, and execute it.
+
+NOTE: this tip will probably not work for ClojureScript.
