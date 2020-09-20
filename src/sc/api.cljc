@@ -143,9 +143,12 @@
 
 (defn last-ep-id
   "Returns the id of the last saved Execution Point, in [ep-id cs-id] form.
+  An optional call-site id can be given to constrain the output
   Throws an Exception if no Execution Point has been saved."
-  []
-  (i/last-ep-id))
+  ([]
+   (i/last-ep-id))
+  ([cs-id]
+   (i/last-ep-id cs-id)))
 
 (defn ep-info
   "Given an Execution Point Id,
