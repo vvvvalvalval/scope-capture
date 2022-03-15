@@ -169,6 +169,13 @@ If your REPL supports it, you can also achive the same effect by launching a sub
 ;;;; a, b, u, v etc. will always be in scope from now on
 ```
 
+### ClojureScript usage
+
+**IMPORTANT: In a typical ClojureScript environment, you have to write `(sc.api/letsc [7 -3] ...)`, not `(sc.api/letsc 7 ...)`.** Same thing for `sc.api/defsc`. Writing `(sc.api/letsc [7 -3] ...)` is also possible in JVM Clojure, just not mandatory.
+
+_How come?_ This is because in ClojureScript, the information linking the Execution Point `7` to the Code Site `-3` is not available to the compilation process in charge of macro-expanding `letsc` and `defsc`. That's why we have to provide the Code Site ID (`-3`) explicitly, as a hardcoded number. To achieve a better understanding of this, see the [Pitfalls with ClojureScript REPLs](https://github.com/vvvvalvalval/scope-capture/wiki/Pitfalls-with-(browser-connected)-ClojureScript-REPLs) Wiki Page.
+
+
 ## Project goals
 
 * Providing practical ways of recreating the runtime environment of a piece of code at the REPL
@@ -179,7 +186,7 @@ If your REPL supports it, you can also achive the same effect by launching a sub
 
 ## Caveats
 
-Using scope-capture with ClojureScript is supported, but can get tricky: when in trouble, see the [Pitfalls with ClojureScript REPLs](https://github.com/vvvvalvalval/scope-capture/wiki/Pitfalls-with-(browser-connected)-ClojureScript-REPLs) Wiki Page.
+Using scope-capture with ClojureScript is supported, but can get tricky: don't forget the above [guideline about ClojureScript usage](#ClojureScript-usage), and when in trouble, see the [Pitfalls with ClojureScript REPLs](https://github.com/vvvvalvalval/scope-capture/wiki/Pitfalls-with-(browser-connected)-ClojureScript-REPLs) Wiki Page.
 
 Dynamic Vars:
 
