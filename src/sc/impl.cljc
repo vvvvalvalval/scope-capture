@@ -122,19 +122,26 @@
       (keys (:locals amp-env)))))
 
 
+(defn- clear-local-meta
+  "For removing meta annotations like type hints, which can cause compilation errors."
+  [l]
+  (vary-meta l (constantly {})))
+
+
 (defn make-cs-data
   [opts cs-id expr amp-env amp-form]
   (let [fm (meta amp-form)]
     {:sc.cs/id cs-id
      :sc.cs/expr expr
      :sc.cs/local-names
-     (extract-local-names (:sc/local-names-extractor opts)
-       amp-env amp-form expr)
+     (mapv clear-local-meta
+       (extract-local-names (:sc/local-names-extractor opts)
+         amp-env amp-form expr))
      :sc.cs/dynamic-var-names
      (get opts :sc/dynamic-vars nil)
-     :sc.cs/file #?(:clj (case (compilation-target amp-env)
-                           :clj *file*
-                           :cljs (:file fm))
+     :sc.cs/file #?(:clj  (case (compilation-target amp-env)
+                            :clj *file*
+                            :cljs (:file fm))
                     :cljs (:file fm))
      :sc.cs/line (:line fm)
      :sc.cs/column (:column fm)}))
