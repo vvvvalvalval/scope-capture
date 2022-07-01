@@ -1,6 +1,6 @@
 # scope-capture
 
-`[vvvvalvalval/scope-capture "0.3.2"]`
+`[vvvvalvalval/scope-capture "0.3.3"]`
 
 [![Clojars Project](https://img.shields.io/clojars/v/vvvvalvalval/scope-capture.svg)](https://clojars.org/vvvvalvalval/scope-capture)
 
@@ -63,7 +63,7 @@ With both Leiningen and Boot, it's better not to include `scope-capture` in your
 Add the following to the `:user` profile in `~/.lein/profiles.clj`:
 
 ``` clojure
-:dependencies [[vvvvalvalval/scope-capture "0.3.2"]]
+:dependencies [[vvvvalvalval/scope-capture "0.3.3"]]
 :injections [(require 'sc.api)]
 ```
 
