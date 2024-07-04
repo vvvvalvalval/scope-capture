@@ -1,5 +1,9 @@
 # scope-capture
 
+> If there's something strange, in your neighborhood, who you gonna call? Scope capture!
+>
+> If there's something weird, and it don't look good, who you gonna call? Scope capture!
+
 `[vvvvalvalval/scope-capture "0.3.3"]`
 
 [![Clojars Project](https://img.shields.io/clojars/v/vvvvalvalval/scope-capture.svg)](https://clojars.org/vvvvalvalval/scope-capture)
