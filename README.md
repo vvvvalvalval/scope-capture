@@ -224,6 +224,7 @@ There are other Clojure tools that enable you to recreate the local context in y
 * **CIDER:** The [CIDER Debugger](https://docs.cider.mx/cider/debugging/debugger.html#keys) lets you evaluate code in the context of a breakpoint.
 * **Calva:** See [Evaluating code in the paused context](https://calva.io/debugger/#evaluating-code-in-the-paused-context)
 * **Proto-REPL:** See [Saving and viewing local bindings values](https://github.com/jasongilman/proto-repl#saving-and-viewing-local-binding-values)
+* **Snitch:** [Snitch](https://github.com/AbhinavOmprakash/snitch) injects inline defs in your functions and multimethods.
 
 
 ### Complementary
