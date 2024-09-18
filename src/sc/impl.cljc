@@ -13,19 +13,26 @@
   (swap! db/ep-id inc))
 
 (defn last-ep-id*
-  [db]
-  (let [eps (get db :execution-points)]
+  [db cs-id]
+  (let [get-cs-id #(-> % :sc.ep/code-site :sc.cs/id)
+        eps (cond->> (get db :execution-points)
+              cs-id (filter (comp #{cs-id} get-cs-id second)))]
     (if (empty? eps)
       (throw (ex-info
-               "No Execution Point has been saved yet."
+               (if cs-id
+                 "No Execution Point for Call Site has been saved yet."
+                 "No Execution Point has been saved yet.")
                {:sc.api.error/error-type
-                :sc.api.error-types/no-ep-saved-yet}))
+                :sc.api.error-types/no-ep-saved-yet
+                :sc.cs/id cs-id}))
       (let [[epid ep-v] (apply max-key first eps)]
-        [epid (-> ep-v :sc.ep/code-site :sc.cs/id)]))))
+        [epid (get-cs-id ep-v)]))))
 
 (defn last-ep-id
-  []
-  (last-ep-id* @db/db))
+  ([]
+   (last-ep-id* @db/db nil))
+  ([cs-id]
+   (last-ep-id* @db/db cs-id)))
 
 (defn valid-ep-identifier?
   [v]
@@ -216,11 +223,12 @@
          spy-pre-eval-logger :sc/spy-ep-pre-eval-logger
          spy-post-eval-logger :sc/spy-ep-post-eval-logger
          only-from :sc/called-from
+         cs-id :sc.cs/id
          :or {cs-logger-id :sc.api.logging/log-spy-cs
               spy-pre-eval-logger `sc.api.logging/log-spy-ep-pre-eval
               spy-post-eval-logger `sc.api.logging/log-spy-ep-post-eval
               }} opts
-        cs-id (gen-cs-id)
+        cs-id (or cs-id (gen-cs-id))
         cs-data (make-cs-data opts cs-id expr amp-env amp-form)]
     (save-cs cs-data)
     (il/log-cs cs-logger-id cs-data)
@@ -264,11 +272,12 @@
          brk-pre-eval-logger :sc/brk-ep-pre-eval-logger
          brk-post-eval-logger :sc/brk-ep-post-eval-logger
          only-from :sc/called-from
+         cs-id :sc.cs/id
          :or {cs-logger-id :sc.api.logging/log-brk-cs
               brk-pre-eval-logger `sc.api.logging/log-brk-ep-pre-eval
               brk-post-eval-logger `sc.api.logging/log-brk-ep-post-eval
               }} opts
-        cs-id (gen-cs-id)
+        cs-id (or cs-id (gen-cs-id))
         cs-data (make-cs-data opts cs-id expr amp-env amp-form)]
     (save-cs cs-data)
     (il/log-cs cs-logger-id cs-data)
